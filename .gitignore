@@ -19,3 +19,9 @@ venv/
 # OS
 .DS_Store
 Thumbs.db
+
+# Lakehouse data
+lakehouse_data/
+
+# Hadoop binaries
+.hadoop/

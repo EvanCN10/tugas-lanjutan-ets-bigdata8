@@ -4,6 +4,8 @@ hdfs==2.7.3
 flask==3.0.3
 flask-cors==4.0.1
 pyspark==3.5.1
+delta-spark==3.1.0
+deltalake>=0.15.0
 requests==2.31.0
 tenacity>=8.2.0
 schedule>=1.2.0
