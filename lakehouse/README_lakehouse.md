@@ -292,9 +292,9 @@ digunakan secara konsisten pada seluruh pipeline.
 
 ---
 
-# Perbandingan Analisis Gold Layer dengan Analisis Spark ETS Sebelumnya
+## 5. Perbandingan Analisis Gold Layer dengan Analisis Spark ETS Sebelumnya
 
-## Analisis Spark ETS Sebelumnya
+### Analisis Spark ETS Sebelumnya
 
 Analisis yang dilakukan pada ETS sebelumnya umumnya terbatas pada:
 
@@ -318,7 +318,7 @@ Hasil:
 
 ---
 
-## 5. Analisis pada Gold Layer
+### Analisis pada Gold Layer
 
 Gold Layer menghasilkan insight yang lebih kaya dan siap digunakan oleh dashboard maupun pengambilan keputusan.
 
