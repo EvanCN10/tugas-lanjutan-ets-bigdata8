@@ -1,0 +1,10 @@
+.venv/
+.git/
+.hadoop/
+lakehouse_data/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.dbf
+.tmp

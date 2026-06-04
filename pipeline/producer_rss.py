@@ -22,8 +22,9 @@ except ModuleNotFoundError as e:
         "Jalankan: pip install -r requirements.txt"
     ) from e
 from tenacity import retry, wait_exponential, stop_after_attempt
+import os
 
-KAFKA_BOOTSTRAP = "localhost:9092"
+KAFKA_BOOTSTRAP = os.getenv("KAFKA_BOOTSTRAP", "localhost:9092")
 TOPIC           = "pangan-rss"
 
 RSS_FEEDS = [

@@ -42,6 +42,8 @@ from delta import configure_spark_with_delta_pip
 from delta.tables import DeltaTable
 from pyspark.sql.functions import col, to_timestamp, hour, to_date, when, lit, upper
 
+import socket
+
 BRONZE_API_PATH = os.path.join(BASE_DIR, "lakehouse_data", "bronze", "pangan_api")
 BRONZE_RSS_PATH = os.path.join(BASE_DIR, "lakehouse_data", "bronze", "pangan_rss")
 SILVER_API_PATH = os.path.join(BASE_DIR, "lakehouse_data", "silver", "pangan_api")
@@ -53,7 +55,21 @@ BRONZE_RSS_URI = "file:///" + BRONZE_RSS_PATH.replace("\\", "/")
 SILVER_API_URI = "file:///" + SILVER_API_PATH.replace("\\", "/")
 SILVER_RSS_URI = "file:///" + SILVER_RSS_PATH.replace("\\", "/")
 
-def build_spark_session():
+HDFS_HOST = "localhost"
+HDFS_PORT = 8020
+
+def is_hdfs_reachable(host, port):
+    """Mengecek apakah port RPC HDFS terbuka untuk koneksi."""
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.settimeout(3.0)
+        s.connect((host, port))
+        s.close()
+        return True
+    except Exception:
+        return False
+
+def build_spark_session(use_hdfs=False):
     builder = SparkSession.builder \
         .appName("Silver-Transformation-Pangan") \
         .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension") \
@@ -62,8 +78,11 @@ def build_spark_session():
         .config("spark.sql.shuffle.partitions", "4") \
         .config("spark.driver.memory", "2g")
     
-    # Deteksi jika defaultFS diset ke HDFS di script ingestion sebelumnya
-    # Supaya pembacaan file lokal aman, kita tidak memaksa defaultFS HDFS di session lokal ini jika hanya memproses Delta lokal.
+    if use_hdfs:
+        hdfs_uri = f"hdfs://{HDFS_HOST}:{HDFS_PORT}"
+        builder.config("spark.hadoop.fs.defaultFS", hdfs_uri)
+        print(f"[CONFIG] Menggunakan HDFS sebagai Default FS: {hdfs_uri}")
+    
     spark = configure_spark_with_delta_pip(
         builder, extra_packages=["io.delta:delta-spark_2.12:3.1.0"]
     ).getOrCreate()
@@ -75,20 +94,42 @@ def build_spark_session():
     return spark
 
 def clean_and_transform():
+    global HDFS_HOST
     print("=" * 70)
     print("        Silver Layer: Transforming Bronze -> Silver")
     print("=" * 70)
 
-    spark = build_spark_session()
+    # 1. Deteksi ketersediaan HDFS
+    hdfs_active = is_hdfs_reachable(HDFS_HOST, HDFS_PORT)
+    if not hdfs_active:
+        hdfs_active = is_hdfs_reachable("namenode", 8020)
+        if hdfs_active:
+            HDFS_HOST = "namenode"
+
+    print(f"[STATUS] HDFS Konektivitas: {'AKTIF' if hdfs_active else 'NON-AKTIF / TIDAK TERJANGKAU'}")
+
+    spark = build_spark_session(use_hdfs=hdfs_active)
 
     # --- 1. PROSES API SILVER ---
     print("\n--- Transforming API Data ---")
-    if not os.path.exists(BRONZE_API_PATH):
-        print(f"[ERROR] Bronze API path tidak ditemukan: {BRONZE_API_PATH}. Jalankan 01_bronze.py dulu.")
-        spark.stop()
-        return
+    
+    # Membaca dari HDFS atau fallback ke lokal
+    bronze_api = None
+    if hdfs_active:
+        try:
+            hdfs_bronze_api_uri = f"hdfs://{HDFS_HOST}:{HDFS_PORT}/lakehouse/bronze/pangan_api"
+            print(f"[HDFS] Membaca Bronze API dari HDFS: {hdfs_bronze_api_uri}")
+            bronze_api = spark.read.format("delta").load(hdfs_bronze_api_uri)
+        except Exception as e:
+            print(f"[WARN] Gagal membaca Bronze API dari HDFS: {e}. Fallback ke lokal...")
+    
+    if bronze_api is None:
+        if not os.path.exists(BRONZE_API_PATH):
+            print(f"[ERROR] Bronze API path tidak ditemukan: {BRONZE_API_PATH}. Jalankan 01_bronze.py dulu.")
+            spark.stop()
+            return
+        bronze_api = spark.read.format("delta").load(BRONZE_API_URI)
 
-    bronze_api = spark.read.format("delta").load(BRONZE_API_URI)
     initial_api_count = bronze_api.count()
     print(f"[READ] Berhasil membaca {initial_api_count} baris dari Bronze API.")
 
@@ -109,12 +150,32 @@ def clean_and_transform():
     
     print(f"[WRITE] Menyimpan ke Silver API Delta: {SILVER_API_URI}")
     silver_api.write.format("delta").mode("overwrite").save(SILVER_API_URI)
+    
+    if hdfs_active:
+        try:
+            hdfs_silver_api_uri = f"hdfs://{HDFS_HOST}:{HDFS_PORT}/lakehouse/silver/pangan_api"
+            print(f"[WRITE HDFS] Menyimpan ke Silver API Delta HDFS: {hdfs_silver_api_uri}")
+            silver_api.write.format("delta").mode("overwrite").save(hdfs_silver_api_uri)
+        except Exception as e:
+            print(f"[ERROR HDFS] Gagal menyimpan Silver API ke HDFS: {e}")
+
     silver_api.show(5)
 
     # --- 2. PROSES RSS SILVER ---
     print("\n--- Transforming RSS Data ---")
-    if os.path.exists(BRONZE_RSS_PATH):
+    bronze_rss = None
+    if hdfs_active:
+        try:
+            hdfs_bronze_rss_uri = f"hdfs://{HDFS_HOST}:{HDFS_PORT}/lakehouse/bronze/pangan_rss"
+            print(f"[HDFS] Membaca Bronze RSS dari HDFS: {hdfs_bronze_rss_uri}")
+            bronze_rss = spark.read.format("delta").load(hdfs_bronze_rss_uri)
+        except Exception as e:
+            print(f"[WARN] Gagal membaca Bronze RSS dari HDFS: {e}. Fallback ke lokal...")
+            
+    if bronze_rss is None and os.path.exists(BRONZE_RSS_PATH):
         bronze_rss = spark.read.format("delta").load(BRONZE_RSS_URI)
+
+    if bronze_rss is not None:
         initial_rss_count = bronze_rss.count()
         print(f"[READ] Berhasil membaca {initial_rss_count} baris dari Bronze RSS.")
 
@@ -130,6 +191,15 @@ def clean_and_transform():
         
         print(f"[WRITE] Menyimpan ke Silver RSS Delta: {SILVER_RSS_URI}")
         silver_rss.write.format("delta").mode("overwrite").save(SILVER_RSS_URI)
+
+        if hdfs_active:
+            try:
+                hdfs_silver_rss_uri = f"hdfs://{HDFS_HOST}:{HDFS_PORT}/lakehouse/silver/pangan_rss"
+                print(f"[WRITE HDFS] Menyimpan ke Silver RSS Delta HDFS: {hdfs_silver_rss_uri}")
+                silver_rss.write.format("delta").mode("overwrite").save(hdfs_silver_rss_uri)
+            except Exception as e:
+                print(f"[ERROR HDFS] Gagal menyimpan Silver RSS ke HDFS: {e}")
+        
         silver_rss.show(5)
     else:
         print("[WARN] Bronze RSS path tidak ditemukan, skip cleaning RSS.")

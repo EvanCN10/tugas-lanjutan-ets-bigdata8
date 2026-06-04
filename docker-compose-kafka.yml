@@ -61,8 +61,77 @@ services:
     depends_on:
       - kafka-broker
 
+  # ── Python App Services ─────────────────────────────────
+  producer-api:
+    build: .
+    container_name: producer-api
+    restart: unless-stopped
+    command: ["python", "pipeline/producer_api.py"]
+    environment:
+      - KAFKA_BOOTSTRAP=kafka-broker:9094
+    networks:
+      - bigdata-net
+    depends_on:
+      - kafka-broker
+
+  producer-rss:
+    build: .
+    container_name: producer-rss
+    restart: unless-stopped
+    command: ["python", "pipeline/producer_rss.py"]
+    environment:
+      - KAFKA_BOOTSTRAP=kafka-broker:9094
+    networks:
+      - bigdata-net
+    depends_on:
+      - kafka-broker
+
+  consumer:
+    build: .
+    container_name: consumer
+    restart: unless-stopped
+    command: ["python", "pipeline/consumer_to_hdfs.py"]
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - app-data:/app/dashboard/data
+    environment:
+      - KAFKA_BOOTSTRAP=kafka-broker:9094
+    networks:
+      - bigdata-net
+    depends_on:
+      - kafka-broker
+
+  medallion-pipeline:
+    build: .
+    container_name: medallion-pipeline
+    restart: unless-stopped
+    command: ["python", "run_pipeline_loop.py"]
+    volumes:
+      - app-data:/app/dashboard/data
+    environment:
+      - KAFKA_BOOTSTRAP=kafka-broker:9094
+    networks:
+      - bigdata-net
+    depends_on:
+      - kafka-broker
+
+  dashboard:
+    build: .
+    container_name: dashboard
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    volumes:
+      - app-data:/app/dashboard/data
+    networks:
+      - bigdata-net
+    depends_on:
+      - consumer
+      - medallion-pipeline
+
 volumes:
   kafka_data:
+  app-data:
 
 networks:
   bigdata-net:

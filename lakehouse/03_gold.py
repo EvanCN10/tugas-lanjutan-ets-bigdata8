@@ -35,6 +35,8 @@ from pyspark.sql import SparkSession, Window
 from delta import configure_spark_with_delta_pip
 from pyspark.sql.functions import col, lag, when, avg, max, min, count, date_format, to_timestamp, explode, concat_ws, lower, array, array_compact, lit
 
+import socket
+
 SILVER_API_PATH = os.path.join(BASE_DIR, "lakehouse_data", "silver", "pangan_api")
 SILVER_RSS_PATH = os.path.join(BASE_DIR, "lakehouse_data", "silver", "pangan_rss")
 
@@ -54,6 +56,20 @@ GOLD_NEWS_URI = "file:///" + GOLD_NEWS_PATH.replace("\\", "/")
 
 SPARK_RESULTS_JSON = os.path.join(BASE_DIR, "dashboard", "data", "spark_results.json")
 
+HDFS_HOST = "localhost"
+HDFS_PORT = 8020
+
+def is_hdfs_reachable(host, port):
+    """Mengecek apakah port RPC HDFS terbuka untuk koneksi."""
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.settimeout(3.0)
+        s.connect((host, port))
+        s.close()
+        return True
+    except Exception:
+        return False
+
 # Keywords Map untuk korelasi berita
 KORELASI_NEWS_KEYWORDS = {
     "Beras": ["beras"],
@@ -69,7 +85,7 @@ KORELASI_NEWS_KEYWORDS = {
 # UDF removed to prevent Python 3.14 cloudpickle recursion stack overflow.
 # Commodity matching is now implemented using pure Spark SQL native functions (array_compact, array, and contains).
 
-def build_spark_session():
+def build_spark_session(use_hdfs=False):
     builder = SparkSession.builder \
         .appName("Gold-Aggregation-Pangan") \
         .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension") \
@@ -78,6 +94,11 @@ def build_spark_session():
         .config("spark.sql.shuffle.partitions", "4") \
         .config("spark.driver.memory", "2g")
     
+    if use_hdfs:
+        hdfs_uri = f"hdfs://{HDFS_HOST}:{HDFS_PORT}"
+        builder.config("spark.hadoop.fs.defaultFS", hdfs_uri)
+        print(f"[CONFIG] Menggunakan HDFS sebagai Default FS: {hdfs_uri}")
+        
     spark = configure_spark_with_delta_pip(
         builder, extra_packages=["io.delta:delta-spark_2.12:3.1.0"]
     ).getOrCreate()
@@ -89,19 +110,39 @@ def build_spark_session():
     return spark
 
 def build_gold_layer():
+    global HDFS_HOST
     print("=" * 70)
     print("        Gold Layer: Aggregating Silver -> Gold Delta Tables")
     print("=" * 70)
 
-    spark = build_spark_session()
+    # 1. Deteksi ketersediaan HDFS
+    hdfs_active = is_hdfs_reachable(HDFS_HOST, HDFS_PORT)
+    if not hdfs_active:
+        hdfs_active = is_hdfs_reachable("namenode", 8020)
+        if hdfs_active:
+            HDFS_HOST = "namenode"
+
+    print(f"[STATUS] HDFS Konektivitas: {'AKTIF' if hdfs_active else 'NON-AKTIF / TIDAK TERJANGKAU'}")
+
+    spark = build_spark_session(use_hdfs=hdfs_active)
 
     # Pastikan data Silver API ada
-    if not os.path.exists(SILVER_API_PATH):
-        print(f"[ERROR] Silver API path tidak ditemukan: {SILVER_API_PATH}. Jalankan 02_silver.py dulu.")
-        spark.stop()
-        return
+    silver_api = None
+    if hdfs_active:
+        try:
+            hdfs_silver_api_uri = f"hdfs://{HDFS_HOST}:{HDFS_PORT}/lakehouse/silver/pangan_api"
+            print(f"[HDFS] Membaca Silver API dari HDFS: {hdfs_silver_api_uri}")
+            silver_api = spark.read.format("delta").load(hdfs_silver_api_uri)
+        except Exception as e:
+            print(f"[WARN] Gagal membaca Silver API dari HDFS: {e}. Fallback ke lokal...")
 
-    silver_api = spark.read.format("delta").load(SILVER_API_URI)
+    if silver_api is None:
+        if not os.path.exists(SILVER_API_PATH):
+            print(f"[ERROR] Silver API path tidak ditemukan: {SILVER_API_PATH}. Jalankan 02_silver.py dulu.")
+            spark.stop()
+            return
+        silver_api = spark.read.format("delta").load(SILVER_API_URI)
+
     print(f"[READ] Memuat {silver_api.count()} baris data dari Silver API.")
 
     # 1. Gold Volatility (Repro)
@@ -125,6 +166,15 @@ def build_gold_layer():
     )
     print(f"[WRITE] Menyimpan ke Gold Volatility Delta: {GOLD_VOLATILITY_URI}")
     gold_volatility.write.format("delta").mode("overwrite").save(GOLD_VOLATILITY_URI)
+    
+    if hdfs_active:
+        try:
+            hdfs_gold_volatility_uri = f"hdfs://{HDFS_HOST}:{HDFS_PORT}/lakehouse/gold/pangan_volatility"
+            print(f"[WRITE HDFS] Menyimpan ke Gold Volatility Delta HDFS: {hdfs_gold_volatility_uri}")
+            gold_volatility.write.format("delta").mode("overwrite").save(hdfs_gold_volatility_uri)
+        except Exception as e:
+            print(f"[ERROR HDFS] Gagal menyimpan Gold Volatility ke HDFS: {e}")
+
     gold_volatility.show()
 
     # 2. Gold Trend per Periode (Repro)
@@ -138,6 +188,15 @@ def build_gold_layer():
     
     print(f"[WRITE] Menyimpan ke Gold Trend Delta: {GOLD_TREND_URI}")
     gold_trend.write.format("delta").mode("overwrite").save(GOLD_TREND_URI)
+    
+    if hdfs_active:
+        try:
+            hdfs_gold_trend_uri = f"hdfs://{HDFS_HOST}:{HDFS_PORT}/lakehouse/gold/pangan_trend"
+            print(f"[WRITE HDFS] Menyimpan ke Gold Trend Delta HDFS: {hdfs_gold_trend_uri}")
+            gold_trend.write.format("delta").mode("overwrite").save(hdfs_gold_trend_uri)
+        except Exception as e:
+            print(f"[ERROR HDFS] Gagal menyimpan Gold Trend ke HDFS: {e}")
+
     gold_trend.show(5)
 
     # 3. Gold Alert (Enhanced - Window Function)
@@ -152,18 +211,37 @@ def build_gold_layer():
                               .when(col("pct_change") < -5, "📉 TURUN SIGNIFIKAN")
                               .otherwise("Normal")) \
         .filter(col("alert") != "Normal") \
-        .select("komoditas", "harga", "prev_harga", "pct_change", "alert", "timestamp")
+        .select("komoditas", "harga", "prev_harga", "pct_change", "alert", date_format("timestamp", "yyyy-MM-dd HH:mm:ss").alias("timestamp"))
     
     print(f"[WRITE] Menyimpan ke Gold Alert Delta: {GOLD_ALERT_URI}")
     gold_alert.write.format("delta").mode("overwrite").save(GOLD_ALERT_URI)
+    
+    if hdfs_active:
+        try:
+            hdfs_gold_alert_uri = f"hdfs://{HDFS_HOST}:{HDFS_PORT}/lakehouse/gold/pangan_alert"
+            print(f"[WRITE HDFS] Menyimpan ke Gold Alert Delta HDFS: {hdfs_gold_alert_uri}")
+            gold_alert.write.format("delta").mode("overwrite").save(hdfs_gold_alert_uri)
+        except Exception as e:
+            print(f"[ERROR HDFS] Gagal menyimpan Gold Alert ke HDFS: {e}")
+
     print(f"[ALERT] {gold_alert.count()} fluktuasi signifikan terdeteksi.")
     gold_alert.show(5)
 
     # 4. Gold News Correlation (Enhanced - Cross-Source Join)
     print("\n--- 4. Generating Gold News Correlation Table ---")
-    if os.path.exists(SILVER_RSS_PATH):
+    silver_rss = None
+    if hdfs_active:
+        try:
+            hdfs_silver_rss_uri = f"hdfs://{HDFS_HOST}:{HDFS_PORT}/lakehouse/silver/pangan_rss"
+            print(f"[HDFS] Membaca Silver RSS dari HDFS: {hdfs_silver_rss_uri}")
+            silver_rss = spark.read.format("delta").load(hdfs_silver_rss_uri)
+        except Exception as e:
+            print(f"[WARN] Gagal membaca Silver RSS dari HDFS: {e}. Fallback ke lokal...")
+            
+    if silver_rss is None and os.path.exists(SILVER_RSS_PATH):
         silver_rss = spark.read.format("delta").load(SILVER_RSS_URI)
-        
+
+    if silver_rss is not None:
         # Ekstrak penyebutan berita per komoditas secara native (JVM-only execution)
         from functools import reduce
         text_col = lower(concat_ws(" ", col("title"), col("summary")))
@@ -196,9 +274,18 @@ def build_gold_layer():
 
     print(f"[WRITE] Menyimpan ke Gold News Delta: {GOLD_NEWS_URI}")
     gold_news_correlation.write.format("delta").mode("overwrite").save(GOLD_NEWS_URI)
+    
+    if hdfs_active:
+        try:
+            hdfs_gold_news_uri = f"hdfs://{HDFS_HOST}:{HDFS_PORT}/lakehouse/gold/pangan_news_correlation"
+            print(f"[WRITE HDFS] Menyimpan ke Gold News Delta HDFS: {hdfs_gold_news_uri}")
+            gold_news_correlation.write.format("delta").mode("overwrite").save(hdfs_gold_news_uri)
+        except Exception as e:
+            print(f"[ERROR HDFS] Gagal menyimpan Gold News ke HDFS: {e}")
+
     gold_news_correlation.show()
 
-    # --- 5. EKSPOR HASIL KE spark_results.json UNTUK DASHBOARD FALLBACK ---
+    # --- 5. EKSPOR HASIL KE spark_results.json UNTUK DASHBOARD ---
     print("\n--- 5. Exporting Results to Dashboard JSON ---")
     
     # Load MLlib results dari JSON yang sudah ada agar tidak hilang
@@ -217,6 +304,7 @@ def build_gold_layer():
     vol_list = [row.asDict() for row in gold_volatility.collect()]
     trend_list = [row.asDict() for row in gold_trend.collect()]
     news_list = [row.asDict() for row in gold_news_correlation.collect()]
+    alert_list = [row.asDict() for row in gold_alert.collect()]
 
     # Format JSON
     now_iso = datetime.now().isoformat()
@@ -225,6 +313,7 @@ def build_gold_layer():
         "volatilitas": vol_list,
         "tren_harga": trend_list,
         "korelasi_berita": news_list,
+        "alert_harga": alert_list,
         "prediksi_mlllib": existing_mllib,
         "mllib_generated_at": mllib_gen_at
     }

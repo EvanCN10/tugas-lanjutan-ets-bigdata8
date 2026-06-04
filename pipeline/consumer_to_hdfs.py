@@ -19,7 +19,7 @@ import subprocess
 
 # ─── Konfigurasi ─────────────────────────────────────────────────────────────
 
-KAFKA_BOOTSTRAP  = "127.0.0.1:9092"  # lebih stabil di Windows (hindari resolusi IPv6 localhost)
+KAFKA_BOOTSTRAP  = os.getenv("KAFKA_BOOTSTRAP", "127.0.0.1:9092")  # lebih stabil di Windows (hindari resolusi IPv6 localhost)
 GROUP_ID         = "pangan-consumer-group"
 HDFS_BATCH_SIZE  = 8      # Flush ke HDFS setiap 8 pesan
 MAX_LOCAL_EVENTS = 200    # Simpan lebih banyak event untuk analisis periodik (UI tetap ambil 50 terakhir)

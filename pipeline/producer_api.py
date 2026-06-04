@@ -135,8 +135,10 @@ def main():
     print("=" * 60)
     
     try:
+        import os
+        bootstrap_srv = os.getenv("KAFKA_BOOTSTRAP", "localhost:9092")
         producer = KafkaProducer(
-            bootstrap_servers=['localhost:9092'],
+            bootstrap_servers=[bootstrap_srv],
             value_serializer=lambda x: json.dumps(x).encode('utf-8'),
             key_serializer=lambda x: x.encode('utf-8'),
             acks='all',

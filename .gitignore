@@ -25,3 +25,6 @@ lakehouse_data/
 
 # Hadoop binaries
 .hadoop/
+
+# gemini skills
+.gemini/

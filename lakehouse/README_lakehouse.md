@@ -691,3 +691,41 @@ only showing top 5 rows
 --- 5. Exporting Results to Dashboard JSON ---
 [SUCCESS] JSON file berhasil diekspor
 ```
+
+---
+
+## 8. Peningkatan Integrasi & Otomasi Docker (Terbaru)
+
+Kami telah meningkatkan kapabilitas sistem untuk mendukung integrasi HDFS penuh dan otomasi total menggunakan Docker Compose:
+
+### 8.1 Integrasi Output HDFS
+- **Tabel Medallion di HDFS**: Semua skrip pipeline (`01_bronze.py`, `02_silver.py`, `03_gold.py`) secara otomatis mendeteksi ketersediaan cluster HDFS (`8020`). Jika aktif, data disimpan ke HDFS (`/lakehouse/bronze/`, `/lakehouse/silver/`, `/lakehouse/gold/`) selain di local directory.
+- **Dukungan Failover**: Jika HDFS tidak dapat dijangkau, skrip secara otomatis melakukan fallback untuk membaca dan menulis ke penyimpanan local secara aman tanpa menghentikan pipeline.
+
+### 8.2 Otomasi Pipeline Penuh via Docker Compose
+Seluruh layanan Python telah diintegrasikan langsung ke dalam [docker-compose-kafka.yml](file:///D:/main-storage/documents/kuliah/sem4/bigdata/tugas-lanjutan/tugas-lanjutan-ets-bigdata8/docker-compose-kafka.yml) agar dapat berjalan secara otomatis bersama Kafka dan Hadoop:
+
+1. **`producer-api`**: Mengirimkan simulasi pergerakan harga pangan ke Kafka secara berkala.
+2. **`producer-rss`**: Melakukan polling berita dari RSS feeds dan mengirimkannya ke Kafka.
+3. **`consumer`**: Membaca streaming data dari Kafka, menulis file mentah ke HDFS (`/data/pangan`), dan mem-buffer data lokal untuk dashboard.
+4. **`medallion-pipeline`**: Berjalan secara kontinu menggunakan `run_pipeline_loop.py` untuk mengolah data Bronze $\to$ Silver $\to$ Gold setiap 60 detik.
+5. **`dashboard`**: Server backend Flask yang menyajikan monitoring UI di port `5000` dengan data visualisasi yang bersumber dari tabel Gold.
+
+### 8.3 Cara Menjalankan Seluruh Stack secara Otomatis
+
+Cukup jalankan satu perintah berikut untuk membangun image dan menjalankan seluruh container (Hadoop, Kafka, Producers, Consumer, Pipeline Loop, dan Dashboard):
+
+```bash
+# 1. Pastikan network bigdata-net sudah terbuat (atau otomatis dibuat oleh cluster Hadoop)
+docker network create bigdata-net
+
+# 2. Jalankan Cluster Hadoop HDFS terlebih dahulu
+docker compose -f docker-compose-hadoop.yml up -d
+
+# 3. Jalankan Kafka + Seluruh Python Application Service secara bersamaan
+docker compose -f docker-compose-kafka.yml up --build -d
+```
+
+Setelah berjalan, Anda dapat memantau dashboard analitik langsung di browser melalui alamat:
+👉 **`http://localhost:5000`**
+

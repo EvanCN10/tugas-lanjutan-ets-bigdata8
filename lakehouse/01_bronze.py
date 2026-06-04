@@ -138,6 +138,17 @@ def ingest_layer():
         print(f"[WRITE] Menyimpan ke Bronze Delta: {bronze_api_target_uri}")
         bronze_api_df.write.format("delta").mode("append").save(bronze_api_target_uri)
         print(f"[SUCCESS] Ingest API selesai. Data tersimpan di {BRONZE_API_TARGET}")
+        
+        # Simpan ke HDFS jika aktif
+        if hdfs_active:
+            try:
+                hdfs_api_target_uri = f"hdfs://{HDFS_HOST}:{HDFS_PORT}/lakehouse/bronze/pangan_api"
+                print(f"[WRITE HDFS] Menyimpan ke Bronze Delta HDFS: {hdfs_api_target_uri}")
+                bronze_api_df.write.format("delta").mode("append").save(hdfs_api_target_uri)
+                print(f"[SUCCESS HDFS] Data API tersimpan di HDFS: {hdfs_api_target_uri}")
+            except Exception as e:
+                print(f"[ERROR HDFS] Gagal menyimpan API ke HDFS: {e}")
+        
         bronze_api_df.show(5, truncate=False)
     
     # 3. Ingest RSS Data
@@ -172,6 +183,17 @@ def ingest_layer():
         print(f"[WRITE] Menyimpan ke Bronze Delta: {bronze_rss_target_uri}")
         bronze_rss_df.write.format("delta").mode("append").save(bronze_rss_target_uri)
         print(f"[SUCCESS] Ingest RSS selesai. Data tersimpan di {BRONZE_RSS_TARGET}")
+        
+        # Simpan ke HDFS jika aktif
+        if hdfs_active:
+            try:
+                hdfs_rss_target_uri = f"hdfs://{HDFS_HOST}:{HDFS_PORT}/lakehouse/bronze/pangan_rss"
+                print(f"[WRITE HDFS] Menyimpan ke Bronze Delta HDFS: {hdfs_rss_target_uri}")
+                bronze_rss_df.write.format("delta").mode("append").save(hdfs_rss_target_uri)
+                print(f"[SUCCESS HDFS] Data RSS tersimpan di HDFS: {hdfs_rss_target_uri}")
+            except Exception as e:
+                print(f"[ERROR HDFS] Gagal menyimpan RSS ke HDFS: {e}")
+        
         bronze_rss_df.show(5, truncate=False)
 
     spark.stop()

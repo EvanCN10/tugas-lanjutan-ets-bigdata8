@@ -121,6 +121,21 @@
         </div>
       </div>
 
+      <!-- Panel 5.5: Alert Fluktuasi Harga (Gold Alert) -->
+      <div class="card card-full">
+        <div class="card-title">
+          <span class="icon">⚠️</span>
+          Alert Fluktuasi Harga (>5%)
+          <span class="card-badge" style="background: #e74c3c; color: white;">Gold Alert</span>
+        </div>
+        <div class="news-list" id="alert-list">
+          <div class="loading-text">
+            <div class="spinner"></div>
+            Memuat alert...
+          </div>
+        </div>
+      </div>
+
       <!-- Panel 6: MLlib — FULL WIDTH, TAMPILAN LENGKAP -->
       <div class="card card-full" id="panel-mlllib">
         <div class="card-title">
@@ -430,6 +445,49 @@
           .join("");
       }
 
+      // ── Panel 5.5: Alert Fluktuasi (Gold Alert) ──────────────────────────────
+      function renderAlert(data) {
+        const el = document.getElementById("alert-list");
+        if (!data || !data.length) {
+          el.innerHTML =
+            '<div class="loading-text">Tidak ada fluktuasi signifikan (>5%) saat ini.</div>';
+          el.style.display = "block";
+          return;
+        }
+
+        // Use a grid layout for full-width cards
+        el.style.display = "grid";
+        el.style.gridTemplateColumns = "repeat(auto-fill, minmax(280px, 1fr))";
+        el.style.gap = "1rem";
+        el.style.maxHeight = "none";
+        el.style.overflow = "visible";
+
+        el.innerHTML = [...data]
+          .reverse()
+          .map((d) => {
+            const isNaik = d.alert && d.alert.includes("NAIK");
+            const color = isNaik ? "#e74c3c" : "#3498db";
+            const bg = isNaik ? "rgba(231, 76, 60, 0.08)" : "rgba(52, 152, 219, 0.08)";
+            return `<div style="padding: 1rem; border-radius: 8px; background: ${bg}; border-left: 4px solid ${color}; text-align: left; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+              <div>
+                <div style="font-weight: 600; font-size: 1.05rem; display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                  <span>${d.komoditas}</span>
+                  <span style="color: ${color}; font-size: 0.85rem; padding: 2px 8px; border-radius: 12px; background: rgba(255,255,255,0.15);">${d.alert}</span>
+                </div>
+                <div style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 0.5rem;">
+                  Harga: <strong>Rp ${(d.harga || 0).toLocaleString("id-ID")}</strong> <br>
+                  <span style="font-size: 0.8rem; color: var(--text-dim);">Sebelumnya: Rp ${(d.prev_harga || 0).toLocaleString("id-ID")}</span>
+                </div>
+              </div>
+              <div style="font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 0.5rem; margin-top: 0.5rem;">
+                <span style="font-weight: 600; color: ${color};">${(d.pct_change || 0).toFixed(1)}%</span>
+                <span style="font-size: 0.75rem; color: var(--text-dim);">${d.timestamp || ""}</span>
+              </div>
+            </div>`;
+          })
+          .join("");
+      }
+
       // ── Panel 6: MLlib — LENGKAP ──────────────────────────────────────────────
       function renderMLlib(prediksiArr, generatedAt) {
         if (!prediksiArr || !prediksiArr.length) {
@@ -634,6 +692,7 @@
           renderTren(spark.tren_harga || []);
           renderVolatilitas(spark.volatilitas || []);
           renderKorelasi(spark.korelasi_berita || []);
+          renderAlert(spark.alert_harga || []);
           renderMLlib(spark.prediksi_mlllib || null, spark.mllib_generated_at);
 
           document.getElementById("status-dot").style.background =
