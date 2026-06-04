@@ -412,13 +412,115 @@ Manfaat:
 
 ## 6. Demonstrasi Time Travel Delta Lake
 
-Time Travel memungkinkan kita mengkueri snapshot data masa lalu menggunakan riwayat transaction log Delta Lake (`_delta_log`).
+Time Travel merupakan salah satu fitur utama Delta Lake yang memungkinkan pengguna mengakses dan membaca versi data sebelumnya tanpa perlu membuat salinan (*backup*) secara manual. Fitur ini bekerja dengan memanfaatkan *transaction log* yang tersimpan pada direktori `_delta_log`, sehingga setiap perubahan pada tabel akan dicatat sebagai versi baru.
 
-Di dalam `02_silver.py`, kami mendemonstrasikan ini dengan:
+Pada implementasi ini, demonstrasi Time Travel dilakukan pada tabel Silver Layer (`pangan_api`) dengan tahapan sebagai berikut:
 
-1. Menampilkan riwayat transaksi menggunakan `deltaTable.history()`.
-2. Mengubah (update) harga Jagung yang di bawah Rp 6000 menjadi Rp 6000.
-3. Membaca data saat ini (setelah ter-update) dan membandingkannya dengan data versi pertama sebelum ter-update menggunakan opsi `.option("versionAsOf", 0)`.
+### 6.1 Menampilkan Riwayat Transaksi
+
+Tahap pertama adalah menampilkan riwayat perubahan tabel menggunakan fungsi:
+
+```python
+deltaTable.history()
+```
+
+Informasi yang ditampilkan meliputi:
+
+- Versi tabel (`version`)
+- Waktu transaksi (`timestamp`)
+- Jenis operasi (`operation`)
+- Pengguna yang melakukan perubahan (`userName`)
+
+Dengan fitur ini, setiap perubahan yang terjadi pada tabel dapat dilacak secara transparan.
+
+---
+
+### 6.2 Melakukan Update Data
+
+Untuk menghasilkan versi baru tabel, dilakukan simulasi perubahan data dengan menambahkan nilai **Rp100** pada seluruh data yang memiliki harga valid (`harga > 0`).
+
+```python
+deltaTable.update(
+    condition="harga > 0",
+    set={"harga": col("harga") + 100}
+)
+```
+
+Pendekatan ini dipilih agar perubahan data selalu terjadi pada setiap eksekusi, tanpa bergantung pada keberadaan komoditas tertentu dalam dataset.
+
+Contoh perubahan data:
+
+| Komoditas | Harga Sebelum | Harga Sesudah |
+|------------|------------:|------------:|
+| Beras | 14.000 | 14.100 |
+| Cabai | 45.000 | 45.100 |
+| Bawang | 32.000 | 32.100 |
+
+Setelah proses update selesai, Delta Lake secara otomatis membuat versi baru dari tabel tanpa menghapus data versi sebelumnya.
+
+---
+
+### 6.3 Membandingkan Data Antar Versi
+
+Untuk membuktikan bahwa versi lama masih tersimpan, dilakukan pembacaan data versi terbaru dan data versi awal menggunakan fitur Time Travel.
+
+Membaca data versi terbaru:
+
+```python
+spark.read.format("delta").load(SILVER_API_URI)
+```
+
+Membaca data versi awal:
+
+```python
+spark.read.format("delta") \
+    .option("versionAsOf", 0) \
+    .load(SILVER_API_URI)
+```
+
+Data versi terbaru menampilkan harga yang telah diperbarui, sedangkan data versi 0 menampilkan kondisi data sebelum update dilakukan.
+
+---
+
+### 6.4 Hasil Demonstrasi
+
+Hasil perbandingan menunjukkan bahwa:
+
+- Delta Lake menyimpan seluruh riwayat perubahan data.
+- Data versi lama tetap dapat diakses meskipun telah terjadi update.
+- Setiap operasi menghasilkan versi baru yang dapat ditelusuri kembali.
+- Tidak diperlukan proses backup manual untuk menjaga histori data.
+
+Contoh hasil perbandingan:
+
+**Versi 0 (Sebelum Update)**
+
+| Komoditas | Harga |
+|------------|------------:|
+| Beras | 14.000 |
+| Cabai | 45.000 |
+| Bawang | 32.000 |
+
+**Versi Terbaru (Setelah Update)**
+
+| Komoditas | Harga |
+|------------|------------:|
+| Beras | 14.100 |
+| Cabai | 45.100 |
+| Bawang | 32.100 |
+
+---
+
+### 6.5 Manfaat Time Travel
+
+Fitur Time Travel memberikan beberapa keuntungan penting, antara lain:
+
+- Melakukan audit dan pelacakan perubahan data.
+- Mempermudah proses debugging pipeline data.
+- Mengembalikan data ke kondisi sebelumnya apabila terjadi kesalahan.
+- Mendukung kebutuhan analitik historis tanpa membuat salinan dataset.
+
+Dengan demikian, Delta Lake memberikan kemampuan *versioning* yang tidak tersedia pada penyimpanan data tradisional seperti CSV atau JSON di HDFS, sehingga lebih sesuai untuk implementasi Data Lakehouse modern..
 
 ---
 
