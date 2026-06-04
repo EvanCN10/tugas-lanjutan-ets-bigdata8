@@ -106,7 +106,193 @@ Lapisan akhir yang siap dikueri oleh pengguna bisnis atau Dashboard. Kami membua
 
 ---
 
-## 4. Demonstrasi Time Travel Delta Lake
+## 4. Transformasi pada Silver Layer
+
+Silver Layer merupakan tahap pemrosesan data setelah data mentah berhasil disimpan pada Bronze Layer. Tujuan utama layer ini adalah meningkatkan kualitas data sehingga siap digunakan untuk analisis pada Gold Layer.
+
+### 1. Menghapus Data Duplikat (Deduplication)
+
+#### Implementasi
+
+```python
+.dropDuplicates(["timestamp", "komoditas", "harga"])
+```
+
+#### Mengapa Penting?
+
+Pada sistem streaming atau proses ingestion berulang, data yang sama dapat masuk lebih dari satu kali. Jika data duplikat tidak dihapus, maka:
+
+- Rata-rata harga menjadi tidak akurat.
+- Perhitungan tren menjadi bias.
+- Visualisasi dashboard menjadi menyesatkan.
+
+#### Contoh
+
+Sebelum:
+
+| Timestamp | Komoditas | Harga |
+|------------|------------|--------|
+| 10:00 | Beras | 14000 |
+| 10:00 | Beras | 14000 |
+
+Sesudah:
+
+| Timestamp | Komoditas | Harga |
+|------------|------------|--------|
+| 10:00 | Beras | 14000 |
+
+---
+
+### 2. Validasi dan Filtering Data
+
+#### Implementasi
+
+```python
+.filter(
+    col("harga").isNotNull() &
+    (col("harga") > 0)
+)
+```
+
+#### Mengapa Penting?
+
+Data harga yang kosong atau bernilai negatif tidak memiliki makna bisnis.
+
+Jika tidak dibersihkan:
+
+- Analisis harga rata-rata menjadi salah.
+- Perhitungan volatilitas menjadi tidak valid.
+- Dashboard dapat menampilkan nilai anomali.
+
+#### Data yang Dihapus
+
+- Harga kosong (`NULL`)
+- Harga = 0
+- Harga negatif
+
+---
+
+### 3. Konversi Tipe Data (Casting)
+
+#### Implementasi
+
+```python
+.withColumn(
+    "harga",
+    col("harga").cast("double")
+)
+```
+
+```python
+.withColumn(
+    "timestamp",
+    to_timestamp(col("timestamp"))
+)
+```
+
+#### Mengapa Penting?
+
+Data dari API dan RSS biasanya diterima dalam bentuk string.
+
+Agar Spark dapat melakukan:
+
+- Perhitungan statistik
+- Sorting waktu
+- Window Function
+- Agregasi
+
+maka data harus dikonversi ke tipe yang sesuai.
+
+#### Contoh
+
+Sebelum:
+
+```text
+harga = "14000"
+timestamp = "2026-06-01 10:00:00"
+```
+
+Sesudah:
+
+```text
+harga = 14000.0
+timestamp = Timestamp
+```
+
+---
+
+### 4. Penambahan Kolom Analitik
+
+#### Implementasi
+
+```python
+.withColumn("jam", hour(col("timestamp")))
+.withColumn("tanggal", to_date(col("timestamp")))
+```
+
+#### Mengapa Penting?
+
+Kolom tambahan mempermudah proses analisis pada Gold Layer.
+
+Contohnya:
+
+- Analisis harga per hari
+- Analisis harga per jam
+- Pembuatan dashboard time-series
+
+#### Contoh
+
+Timestamp:
+
+```text
+2026-06-01 15:45:22
+```
+
+Menjadi:
+
+| Jam | Tanggal |
+|------|----------|
+| 15 | 2026-06-01 |
+
+---
+
+### 5. Standarisasi Nama Komoditas
+
+#### Implementasi
+
+```python
+.when(col("komoditas") == "beras", "Beras")
+```
+
+#### Mengapa Penting?
+
+Sumber data yang berbeda sering menggunakan format penulisan berbeda.
+
+Contoh:
+
+```text
+beras
+BERAS
+Beras
+beras medium
+```
+
+Jika tidak diseragamkan:
+
+- Spark menganggapnya sebagai komoditas berbeda.
+- Hasil agregasi menjadi tidak akurat.
+
+Setelah standarisasi:
+
+```text
+Beras
+```
+
+digunakan secara konsisten pada seluruh pipeline.
+
+---
+
+## 5. Demonstrasi Time Travel Delta Lake
 
 Time Travel memungkinkan kita mengkueri snapshot data masa lalu menggunakan riwayat transaction log Delta Lake (`_delta_log`).
 
@@ -118,7 +304,7 @@ Di dalam `02_silver.py`, kami mendemonstrasikan ini dengan:
 
 ---
 
-## 5. Refleksi: Keuntungan Nyata Delta Lake vs Flat HDFS/CSV
+## 6. Refleksi: Keuntungan Nyata Delta Lake vs Flat HDFS/CSV
 
 Dengan menerapkan Delta Lake sebagai format tabel, kami memperoleh keuntungan krusial dibanding menyimpan langsung di HDFS (berupa file JSON/CSV biasa):
 
