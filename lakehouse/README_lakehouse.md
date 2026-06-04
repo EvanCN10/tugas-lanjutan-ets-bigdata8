@@ -292,7 +292,125 @@ digunakan secara konsisten pada seluruh pipeline.
 
 ---
 
-## 5. Demonstrasi Time Travel Delta Lake
+# Perbandingan Analisis Gold Layer dengan Analisis Spark ETS Sebelumnya
+
+## Analisis Spark ETS Sebelumnya
+
+Analisis yang dilakukan pada ETS sebelumnya umumnya terbatas pada:
+
+- Statistik dasar
+- Rata-rata harga
+- Jumlah data
+- Visualisasi sederhana
+- Query Spark biasa
+
+Contoh:
+
+```python
+df.groupBy("komoditas").avg("harga")
+```
+
+Hasil:
+
+| Komoditas | Rata-rata Harga |
+|------------|----------------|
+| Beras | 14500 |
+
+---
+
+## 5. Analisis pada Gold Layer
+
+Gold Layer menghasilkan insight yang lebih kaya dan siap digunakan oleh dashboard maupun pengambilan keputusan.
+
+### 1. Volatilitas Harga
+
+Mengukur seberapa besar fluktuasi harga suatu komoditas.
+
+```python
+(max_harga - min_harga) / min_harga
+```
+
+Manfaat:
+
+- Identifikasi komoditas tidak stabil.
+- Monitoring risiko kenaikan harga.
+
+---
+
+### 2. Trend Harga
+
+Menganalisis perubahan harga berdasarkan waktu.
+
+Manfaat:
+
+- Mengetahui arah pergerakan harga.
+- Dasar pembuatan grafik time-series.
+
+---
+
+### 3. Alert Harga
+
+Menggunakan Window Function.
+
+```python
+lag("harga")
+```
+
+Manfaat:
+
+- Deteksi kenaikan harga secara otomatis.
+- Monitoring kondisi pasar secara real-time.
+
+Contoh:
+
+| Harga Lama | Harga Baru |
+|------------|------------|
+| 10000 | 12000 |
+
+Kenaikan:
+
+```text
+20%
+```
+
+Alert:
+
+```text
+NAIK SIGNIFIKAN
+```
+
+---
+
+### 4. Korelasi Berita dan Harga
+
+Menggabungkan:
+
+- Data harga
+- Data RSS berita
+
+Manfaat:
+
+- Mengetahui pengaruh berita terhadap harga pasar.
+- Insight yang tidak tersedia pada analisis Spark biasa.
+
+---
+
+### Ringkasan Perbandingan
+
+| Fitur | Spark ETS Lama | Gold Layer |
+|---------|---------|---------|
+| Statistik Dasar | ✓ | ✓ |
+| Rata-rata Harga | ✓ | ✓ |
+| Trend Harga | ✗ | ✓ |
+| Volatilitas | ✗ | ✓ |
+| Alert Otomatis | ✗ | ✓ |
+| Korelasi Berita | ✗ | ✓ |
+| Dashboard Ready | Sebagian | ✓ |
+| Business Insight | Rendah | Tinggi |
+
+---
+
+## 6. Demonstrasi Time Travel Delta Lake
 
 Time Travel memungkinkan kita mengkueri snapshot data masa lalu menggunakan riwayat transaction log Delta Lake (`_delta_log`).
 
@@ -304,7 +422,7 @@ Di dalam `02_silver.py`, kami mendemonstrasikan ini dengan:
 
 ---
 
-## 6. Refleksi: Keuntungan Nyata Delta Lake vs Flat HDFS/CSV
+## 7. Refleksi: Keuntungan Nyata Delta Lake vs Flat HDFS/CSV
 
 Dengan menerapkan Delta Lake sebagai format tabel, kami memperoleh keuntungan krusial dibanding menyimpan langsung di HDFS (berupa file JSON/CSV biasa):
 
