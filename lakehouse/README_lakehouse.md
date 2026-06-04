@@ -6,55 +6,109 @@ Dokumentasi ini menjelaskan peningkatan arsitektur data pipeline **HargaPangan**
 
 ## 1. Diagram Arsitektur: Sebelum vs Sesudah
 
-### Arsitektur Lama (ETS - JSON Mentah)
+### Arsitektur Lama (ETS - JSON Based Analytics)
 
 ```mermaid
 graph LR
-    subgraph Pengumpulan
-        API[API Real-time] --> Kafka[Apache Kafka]
-        RSS[RSS Feed] --> Kafka
-    end
-
-    subgraph Penyimpanan
-        Kafka --> Consumer[HDFS Consumer]
-        Consumer --> HDFS[HDFS /data/pangan/ api & rss JSON]
-    end
-
-    subgraph Analisis & Visualisasi
-        HDFS --> Spark[Spark analysis.py]
-        Spark --> SparkResults[spark_results.json]
-        SparkResults --> Flask[Flask Dashboard]
-    end
-```
-
-### Arsitektur Baru (Data Lakehouse - Medallion Architecture + Delta Lake)
-
-```mermaid
-graph TD
     subgraph Data Sources
         API[API Real-time]
         RSS[RSS Feed]
     end
 
-    subgraph Ingestion & Streaming
+    subgraph Streaming & Storage
         API --> Kafka[Apache Kafka]
         RSS --> Kafka
-        Kafka --> HDFS[HDFS /data/pangan/ api & rss JSON]
+        Kafka --> Consumer[Kafka Consumer]
+        Consumer --> HDFS[HDFS JSON Storage]
     end
 
-    subgraph Lakehouse Layer (Delta Lake)
-        HDFS -->|"01_bronze.py"| Bronze["🥉 Bronze Layer (Raw Delta Table) <br/> pangan_api & pangan_rss <br/> + _ingested_at, _source"]
-        
-        Bronze -->|"02_silver.py (Clean, Cast, Deduplicate)"| Silver["🥈 Silver Layer (Cleaned Delta Table) <br/> pangan_api & pangan_rss <br/> Tipe data benar, tanpa duplikat/null"]
-        
-        Silver -->|"03_gold.py (Aggregate, Window, Join)"| Gold["🥇 Gold Layer (Aggregated Delta Table) <br/> pangan_volatility, pangan_trend, pangan_alert, pangan_news"]
+    subgraph Analytics
+        HDFS --> Spark[Spark analysis.py]
+        Spark --> Results[spark_results.json]
     end
 
-    subgraph Dashboard BI
-        Gold -->|"deltalake Python / spark_results.json fallback"| Flask[Flask Dashboard Backend]
-        Flask --> UI[Web UI Monitor]
+    subgraph Visualization
+        Results --> Flask[Flask Dashboard]
+        Flask --> UI[Monitoring UI]
     end
 ```
+
+**Kelemahan Arsitektur Lama:**
+
+- Data hanya disimpan dalam format JSON mentah.
+- Tidak memiliki versioning data.
+- Tidak mendukung ACID Transaction.
+- Tidak memiliki mekanisme Time Travel.
+- Analisis harus dijalankan ulang dari data mentah setiap kali dibutuhkan.
+
+---
+
+### Arsitektur Baru (Data Lakehouse dengan Delta Lake)
+
+```mermaid
+graph TD
+
+    subgraph Data Sources
+        API[API Real-time]
+        RSS[RSS Feed]
+    end
+
+    subgraph Streaming & Ingestion
+        API --> Kafka[Apache Kafka]
+        RSS --> Kafka
+        Kafka --> HDFS[HDFS Raw JSON]
+    end
+
+    subgraph Lakehouse Storage
+        HDFS --> Bronze["🥉 Bronze Layer
+        Raw Delta Tables
+        pangan_api
+        pangan_rss"]
+
+        Bronze --> Silver["🥈 Silver Layer
+        Cleaned Delta Tables
+        Deduplication
+        Type Casting
+        Validation
+        Feature Extraction"]
+
+        Silver --> Gold["🥇 Gold Layer
+        Business Analytics Tables
+        pangan_volatility
+        pangan_trend
+        pangan_alert
+        pangan_news_correlation"]
+    end
+
+    subgraph Delta Lake Features
+        Bronze -.-> Delta[ACID Transaction]
+        Silver -.-> Delta
+        Gold -.-> Delta
+
+        Bronze -.-> TimeTravel[Time Travel & Versioning]
+        Silver -.-> TimeTravel
+        Gold -.-> TimeTravel
+    end
+
+    subgraph Dashboard & Analytics
+        Gold --> Flask[Flask Dashboard Backend]
+        Flask --> UI[Web Monitoring Dashboard]
+    end
+```
+
+### Alur Data
+
+1. Data harga pangan dan berita dikumpulkan dari API dan RSS Feed.
+2. Data dikirim melalui Apache Kafka dan disimpan dalam format JSON di HDFS.
+3. `01_bronze.py` melakukan ingest data ke Bronze Layer sebagai Delta Table tanpa mengubah isi data.
+4. `02_silver.py` melakukan proses cleaning dan transformasi seperti deduplikasi, validasi data, type casting, serta ekstraksi atribut waktu.
+5. `03_gold.py` menghasilkan tabel analitik berupa:
+   - Volatilitas harga komoditas
+   - Tren harga
+   - Alert perubahan harga
+   - Korelasi berita dan harga
+6. Dashboard Flask membaca data dari Gold Layer untuk kebutuhan visualisasi dan monitoring.
+7. Seluruh layer Delta Lake mendukung ACID Transaction, Versioning, dan Time Travel sehingga histori data dapat diakses kembali kapan saja.
 
 ---
 
