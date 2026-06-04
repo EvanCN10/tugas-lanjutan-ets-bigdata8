@@ -44,13 +44,13 @@ GOLD_ALERT_PATH = os.path.join(BASE_DIR, "lakehouse_data", "gold", "pangan_alert
 GOLD_NEWS_PATH = os.path.join(BASE_DIR, "lakehouse_data", "gold", "pangan_news_correlation")
 
 # Convert local paths to valid URIs for Spark
-SILVER_API_URI = Path(SILVER_API_PATH).as_uri()
-SILVER_RSS_URI = Path(SILVER_RSS_PATH).as_uri()
+SILVER_API_URI = "file:///" + SILVER_API_PATH.replace("\\", "/")
+SILVER_RSS_URI = "file:///" + SILVER_RSS_PATH.replace("\\", "/")
 
-GOLD_VOLATILITY_URI = Path(GOLD_VOLATILITY_PATH).as_uri()
-GOLD_TREND_URI = Path(GOLD_TREND_PATH).as_uri()
-GOLD_ALERT_URI = Path(GOLD_ALERT_PATH).as_uri()
-GOLD_NEWS_URI = Path(GOLD_NEWS_PATH).as_uri()
+GOLD_VOLATILITY_URI = "file:///" + GOLD_VOLATILITY_PATH.replace("\\", "/")
+GOLD_TREND_URI = "file:///" + GOLD_TREND_PATH.replace("\\", "/")
+GOLD_ALERT_URI = "file:///" + GOLD_ALERT_PATH.replace("\\", "/")
+GOLD_NEWS_URI = "file:///" + GOLD_NEWS_PATH.replace("\\", "/")
 
 SPARK_RESULTS_JSON = os.path.join(BASE_DIR, "dashboard", "data", "spark_results.json")
 
@@ -82,6 +82,10 @@ def build_spark_session():
         builder, extra_packages=["io.delta:delta-spark_2.12:3.1.0"]
     ).getOrCreate()
     spark.sparkContext.setLogLevel("WARN")
+    try:
+        spark._jvm.org.apache.logging.log4j.core.config.Configurator.setLevel("org.apache.spark.util.ShutdownHookManager", spark._jvm.org.apache.logging.log4j.Level.OFF)
+    except Exception:
+        pass
     return spark
 
 def build_gold_layer():

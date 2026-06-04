@@ -1,1028 +1,788 @@
 {
-  "generated_at": "2026-05-11T16:56:22.655162",
+  "generated_at": "2026-06-04T09:56:37.891028",
   "volatilitas": [
     {
-      "komoditas": "Cabai Merah",
-      "harga_max": 46036.0,
-      "harga_min": 43023.0,
-      "harga_avg": 44273.68,
-      "jumlah_data": 25,
-      "volatilitas_pct": 7.0
-    },
-    {
       "komoditas": "Bawang Merah",
-      "harga_max": 39055.0,
-      "harga_min": 37604.0,
-      "harga_avg": 38195.92,
-      "jumlah_data": 25,
-      "volatilitas_pct": 3.86
+      "harga_max": 39054.0,
+      "harga_min": 38083.0,
+      "harga_avg": 38660.23,
+      "jumlah_data": 13,
+      "volatilitas_pct": 2.55
     },
     {
-      "komoditas": "Kedelai",
-      "harga_max": 14330.0,
-      "harga_min": 14014.0,
-      "harga_avg": 14185.08,
-      "jumlah_data": 25,
-      "volatilitas_pct": 2.25
-    },
-    {
-      "komoditas": "Telur Ayam",
-      "harga_max": 29476.0,
-      "harga_min": 28861.0,
-      "harga_avg": 29118.76,
-      "jumlah_data": 25,
-      "volatilitas_pct": 2.13
-    },
-    {
-      "komoditas": "Minyak Goreng",
-      "harga_max": 19062.0,
-      "harga_min": 18744.0,
-      "harga_avg": 18858.52,
-      "jumlah_data": 25,
-      "volatilitas_pct": 1.7
+      "komoditas": "Cabai Merah",
+      "harga_max": 45648.0,
+      "harga_min": 44760.0,
+      "harga_avg": 45197.54,
+      "jumlah_data": 13,
+      "volatilitas_pct": 1.98
     },
     {
       "komoditas": "Jagung",
-      "harga_max": 6547.0,
-      "harga_min": 6485.0,
-      "harga_avg": 6515.88,
-      "jumlah_data": 25,
-      "volatilitas_pct": 0.96
-    },
-    {
-      "komoditas": "Beras",
-      "harga_max": 13604.0,
-      "harga_min": 13476.0,
-      "harga_avg": 13543.36,
-      "jumlah_data": 25,
-      "volatilitas_pct": 0.95
+      "harga_max": 6557.0,
+      "harga_min": 6475.0,
+      "harga_avg": 6510.85,
+      "jumlah_data": 13,
+      "volatilitas_pct": 1.27
     },
     {
       "komoditas": "Gula Pasir",
-      "harga_max": 16632.0,
-      "harga_min": 16556.0,
-      "harga_avg": 16596.12,
-      "jumlah_data": 25,
-      "volatilitas_pct": 0.46
+      "harga_max": 16521.0,
+      "harga_min": 16403.0,
+      "harga_avg": 16468.46,
+      "jumlah_data": 13,
+      "volatilitas_pct": 0.72
+    },
+    {
+      "komoditas": "Kedelai",
+      "harga_max": 14013.0,
+      "harga_min": 13916.0,
+      "harga_avg": 13963.15,
+      "jumlah_data": 13,
+      "volatilitas_pct": 0.7
+    },
+    {
+      "komoditas": "Beras",
+      "harga_max": 13517.0,
+      "harga_min": 13426.0,
+      "harga_avg": 13482.85,
+      "jumlah_data": 13,
+      "volatilitas_pct": 0.68
+    },
+    {
+      "komoditas": "Minyak Goreng",
+      "harga_max": 19026.0,
+      "harga_min": 18902.0,
+      "harga_avg": 18960.46,
+      "jumlah_data": 13,
+      "volatilitas_pct": 0.66
+    },
+    {
+      "komoditas": "Telur Ayam",
+      "harga_max": 29233.0,
+      "harga_min": 29113.0,
+      "harga_avg": 29159.85,
+      "jumlah_data": 13,
+      "volatilitas_pct": 0.41
     }
   ],
   "tren_harga": [
     {
       "komoditas": "Bawang Merah",
-      "periode": "2026-05-11 09:44",
-      "harga_rata": 38774.0
+      "periode": "2026-06-04 02:50",
+      "harga_rata": 38287.0
     },
     {
       "komoditas": "Beras",
-      "periode": "2026-05-11 09:44",
-      "harga_rata": 13578.0
+      "periode": "2026-06-04 02:50",
+      "harga_rata": 13514.0
     },
     {
       "komoditas": "Cabai Merah",
-      "periode": "2026-05-11 09:44",
-      "harga_rata": 45880.0
+      "periode": "2026-06-04 02:50",
+      "harga_rata": 44918.0
     },
     {
       "komoditas": "Gula Pasir",
-      "periode": "2026-05-11 09:44",
-      "harga_rata": 16594.0
+      "periode": "2026-06-04 02:50",
+      "harga_rata": 16510.0
     },
     {
       "komoditas": "Jagung",
-      "periode": "2026-05-11 09:44",
-      "harga_rata": 6496.0
+      "periode": "2026-06-04 02:50",
+      "harga_rata": 6499.0
     },
     {
       "komoditas": "Kedelai",
-      "periode": "2026-05-11 09:44",
-      "harga_rata": 14038.0
+      "periode": "2026-06-04 02:50",
+      "harga_rata": 14006.0
     },
     {
       "komoditas": "Minyak Goreng",
-      "periode": "2026-05-11 09:44",
-      "harga_rata": 19036.0
+      "periode": "2026-06-04 02:50",
+      "harga_rata": 19008.0
     },
     {
       "komoditas": "Telur Ayam",
-      "periode": "2026-05-11 09:44",
-      "harga_rata": 28970.0
-    },
-    {
-      "komoditas": "Bawang Merah",
-      "periode": "2026-05-11 09:45",
-      "harga_rata": 38536.0
-    },
-    {
-      "komoditas": "Beras",
-      "periode": "2026-05-11 09:45",
-      "harga_rata": 13582.0
-    },
-    {
-      "komoditas": "Cabai Merah",
-      "periode": "2026-05-11 09:45",
-      "harga_rata": 45903.0
-    },
-    {
-      "komoditas": "Gula Pasir",
-      "periode": "2026-05-11 09:45",
-      "harga_rata": 16586.0
-    },
-    {
-      "komoditas": "Jagung",
-      "periode": "2026-05-11 09:45",
-      "harga_rata": 6509.0
-    },
-    {
-      "komoditas": "Kedelai",
-      "periode": "2026-05-11 09:45",
-      "harga_rata": 14107.0
-    },
-    {
-      "komoditas": "Minyak Goreng",
-      "periode": "2026-05-11 09:45",
-      "harga_rata": 19016.0
-    },
-    {
-      "komoditas": "Telur Ayam",
-      "periode": "2026-05-11 09:45",
-      "harga_rata": 28882.0
-    },
-    {
-      "komoditas": "Bawang Merah",
-      "periode": "2026-05-11 09:46",
-      "harga_rata": 38497.0
-    },
-    {
-      "komoditas": "Beras",
-      "periode": "2026-05-11 09:46",
-      "harga_rata": 13592.0
-    },
-    {
-      "komoditas": "Cabai Merah",
-      "periode": "2026-05-11 09:46",
-      "harga_rata": 45288.0
-    },
-    {
-      "komoditas": "Gula Pasir",
-      "periode": "2026-05-11 09:46",
-      "harga_rata": 16592.0
-    },
-    {
-      "komoditas": "Jagung",
-      "periode": "2026-05-11 09:46",
-      "harga_rata": 6526.0
-    },
-    {
-      "komoditas": "Kedelai",
-      "periode": "2026-05-11 09:46",
-      "harga_rata": 14122.0
-    },
-    {
-      "komoditas": "Minyak Goreng",
-      "periode": "2026-05-11 09:46",
-      "harga_rata": 18923.0
-    },
-    {
-      "komoditas": "Telur Ayam",
-      "periode": "2026-05-11 09:46",
-      "harga_rata": 28970.0
-    },
-    {
-      "komoditas": "Bawang Merah",
-      "periode": "2026-05-11 09:47",
-      "harga_rata": 38097.0
-    },
-    {
-      "komoditas": "Beras",
-      "periode": "2026-05-11 09:47",
-      "harga_rata": 13554.0
-    },
-    {
-      "komoditas": "Cabai Merah",
-      "periode": "2026-05-11 09:47",
-      "harga_rata": 44378.0
-    },
-    {
-      "komoditas": "Gula Pasir",
-      "periode": "2026-05-11 09:47",
-      "harga_rata": 16588.0
-    },
-    {
-      "komoditas": "Jagung",
-      "periode": "2026-05-11 09:47",
-      "harga_rata": 6507.0
-    },
-    {
-      "komoditas": "Kedelai",
-      "periode": "2026-05-11 09:47",
-      "harga_rata": 14144.0
-    },
-    {
-      "komoditas": "Minyak Goreng",
-      "periode": "2026-05-11 09:47",
-      "harga_rata": 18912.0
-    },
-    {
-      "komoditas": "Telur Ayam",
-      "periode": "2026-05-11 09:47",
-      "harga_rata": 28960.0
-    },
-    {
-      "komoditas": "Bawang Merah",
-      "periode": "2026-05-11 09:48",
-      "harga_rata": 38011.0
-    },
-    {
-      "komoditas": "Beras",
-      "periode": "2026-05-11 09:48",
-      "harga_rata": 13510.0
-    },
-    {
-      "komoditas": "Cabai Merah",
-      "periode": "2026-05-11 09:48",
-      "harga_rata": 44162.0
-    },
-    {
-      "komoditas": "Gula Pasir",
-      "periode": "2026-05-11 09:48",
-      "harga_rata": 16613.0
-    },
-    {
-      "komoditas": "Jagung",
-      "periode": "2026-05-11 09:48",
-      "harga_rata": 6520.0
-    },
-    {
-      "komoditas": "Kedelai",
-      "periode": "2026-05-11 09:48",
-      "harga_rata": 14133.0
-    },
-    {
-      "komoditas": "Minyak Goreng",
-      "periode": "2026-05-11 09:48",
-      "harga_rata": 18852.0
-    },
-    {
-      "komoditas": "Telur Ayam",
-      "periode": "2026-05-11 09:48",
-      "harga_rata": 28916.0
-    },
-    {
-      "komoditas": "Bawang Merah",
-      "periode": "2026-05-11 09:49",
-      "harga_rata": 38163.0
-    },
-    {
-      "komoditas": "Beras",
-      "periode": "2026-05-11 09:49",
-      "harga_rata": 13534.0
-    },
-    {
-      "komoditas": "Cabai Merah",
-      "periode": "2026-05-11 09:49",
-      "harga_rata": 43658.0
-    },
-    {
-      "komoditas": "Gula Pasir",
-      "periode": "2026-05-11 09:49",
-      "harga_rata": 16596.0
-    },
-    {
-      "komoditas": "Jagung",
-      "periode": "2026-05-11 09:49",
-      "harga_rata": 6529.0
-    },
-    {
-      "komoditas": "Kedelai",
-      "periode": "2026-05-11 09:49",
-      "harga_rata": 14214.0
-    },
-    {
-      "komoditas": "Minyak Goreng",
-      "periode": "2026-05-11 09:49",
-      "harga_rata": 18860.0
-    },
-    {
-      "komoditas": "Telur Ayam",
-      "periode": "2026-05-11 09:49",
-      "harga_rata": 29019.0
-    },
-    {
-      "komoditas": "Bawang Merah",
-      "periode": "2026-05-11 09:50",
-      "harga_rata": 37664.0
-    },
-    {
-      "komoditas": "Beras",
-      "periode": "2026-05-11 09:50",
-      "harga_rata": 13512.0
-    },
-    {
-      "komoditas": "Cabai Merah",
-      "periode": "2026-05-11 09:50",
-      "harga_rata": 44112.0
-    },
-    {
-      "komoditas": "Gula Pasir",
-      "periode": "2026-05-11 09:50",
-      "harga_rata": 16562.0
-    },
-    {
-      "komoditas": "Jagung",
-      "periode": "2026-05-11 09:50",
-      "harga_rata": 6518.0
-    },
-    {
-      "komoditas": "Kedelai",
-      "periode": "2026-05-11 09:50",
-      "harga_rata": 14260.0
-    },
-    {
-      "komoditas": "Minyak Goreng",
-      "periode": "2026-05-11 09:50",
-      "harga_rata": 18884.0
-    },
-    {
-      "komoditas": "Telur Ayam",
-      "periode": "2026-05-11 09:50",
+      "periode": "2026-06-04 02:50",
       "harga_rata": 29120.0
     },
     {
       "komoditas": "Bawang Merah",
-      "periode": "2026-05-11 09:51",
-      "harga_rata": 37682.0
+      "periode": "2026-06-04 02:51",
+      "harga_rata": 38676.0
     },
     {
       "komoditas": "Beras",
-      "periode": "2026-05-11 09:51",
-      "harga_rata": 13488.0
+      "periode": "2026-06-04 02:51",
+      "harga_rata": 13510.0
     },
     {
       "komoditas": "Cabai Merah",
-      "periode": "2026-05-11 09:51",
-      "harga_rata": 44290.0
+      "periode": "2026-06-04 02:51",
+      "harga_rata": 44949.0
     },
     {
       "komoditas": "Gula Pasir",
-      "periode": "2026-05-11 09:51",
-      "harga_rata": 16578.0
+      "periode": "2026-06-04 02:51",
+      "harga_rata": 16488.0
     },
     {
       "komoditas": "Jagung",
-      "periode": "2026-05-11 09:51",
-      "harga_rata": 6505.0
+      "periode": "2026-06-04 02:51",
+      "harga_rata": 6478.0
     },
     {
       "komoditas": "Kedelai",
-      "periode": "2026-05-11 09:51",
-      "harga_rata": 14312.0
+      "periode": "2026-06-04 02:51",
+      "harga_rata": 13946.0
     },
     {
       "komoditas": "Minyak Goreng",
-      "periode": "2026-05-11 09:51",
-      "harga_rata": 18772.0
+      "periode": "2026-06-04 02:51",
+      "harga_rata": 18920.0
     },
     {
       "komoditas": "Telur Ayam",
-      "periode": "2026-05-11 09:51",
-      "harga_rata": 29046.0
+      "periode": "2026-06-04 02:51",
+      "harga_rata": 29154.0
     },
     {
       "komoditas": "Bawang Merah",
-      "periode": "2026-05-11 09:52",
-      "harga_rata": 38072.0
+      "periode": "2026-06-04 02:52",
+      "harga_rata": 38862.0
     },
     {
       "komoditas": "Beras",
-      "periode": "2026-05-11 09:52",
-      "harga_rata": 13502.0
+      "periode": "2026-06-04 02:52",
+      "harga_rata": 13510.0
     },
     {
       "komoditas": "Cabai Merah",
-      "periode": "2026-05-11 09:52",
-      "harga_rata": 43416.0
+      "periode": "2026-06-04 02:52",
+      "harga_rata": 45094.0
     },
     {
       "komoditas": "Gula Pasir",
-      "periode": "2026-05-11 09:52",
-      "harga_rata": 16604.0
+      "periode": "2026-06-04 02:52",
+      "harga_rata": 16514.0
     },
     {
       "komoditas": "Jagung",
-      "periode": "2026-05-11 09:52",
-      "harga_rata": 6486.0
+      "periode": "2026-06-04 02:52",
+      "harga_rata": 6503.0
     },
     {
       "komoditas": "Kedelai",
-      "periode": "2026-05-11 09:52",
-      "harga_rata": 14296.0
+      "periode": "2026-06-04 02:52",
+      "harga_rata": 13932.0
     },
     {
       "komoditas": "Minyak Goreng",
-      "periode": "2026-05-11 09:52",
-      "harga_rata": 18778.0
+      "periode": "2026-06-04 02:52",
+      "harga_rata": 18950.0
     },
     {
       "komoditas": "Telur Ayam",
-      "periode": "2026-05-11 09:52",
-      "harga_rata": 29269.0
+      "periode": "2026-06-04 02:52",
+      "harga_rata": 29153.0
     },
     {
       "komoditas": "Bawang Merah",
-      "periode": "2026-05-11 09:53",
-      "harga_rata": 38286.0
+      "periode": "2026-06-04 02:53",
+      "harga_rata": 38695.0
     },
     {
       "komoditas": "Beras",
-      "periode": "2026-05-11 09:53",
-      "harga_rata": 13512.0
+      "periode": "2026-06-04 02:53",
+      "harga_rata": 13469.0
     },
     {
       "komoditas": "Cabai Merah",
-      "periode": "2026-05-11 09:53",
-      "harga_rata": 43306.0
+      "periode": "2026-06-04 02:53",
+      "harga_rata": 45544.0
     },
     {
       "komoditas": "Gula Pasir",
-      "periode": "2026-05-11 09:53",
-      "harga_rata": 16600.0
+      "periode": "2026-06-04 02:53",
+      "harga_rata": 16469.0
     },
     {
       "komoditas": "Jagung",
-      "periode": "2026-05-11 09:53",
-      "harga_rata": 6522.0
+      "periode": "2026-06-04 02:53",
+      "harga_rata": 6510.0
     },
     {
       "komoditas": "Kedelai",
-      "periode": "2026-05-11 09:53",
-      "harga_rata": 14260.0
+      "periode": "2026-06-04 02:53",
+      "harga_rata": 13924.0
     },
     {
       "komoditas": "Minyak Goreng",
-      "periode": "2026-05-11 09:53",
-      "harga_rata": 18782.0
+      "periode": "2026-06-04 02:53",
+      "harga_rata": 18956.0
     },
     {
       "komoditas": "Telur Ayam",
-      "periode": "2026-05-11 09:53",
-      "harga_rata": 29342.0
+      "periode": "2026-06-04 02:53",
+      "harga_rata": 29204.0
     },
     {
       "komoditas": "Bawang Merah",
-      "periode": "2026-05-11 09:54",
-      "harga_rata": 38472.0
+      "periode": "2026-06-04 02:54",
+      "harga_rata": 38683.0
     },
     {
       "komoditas": "Beras",
-      "periode": "2026-05-11 09:54",
-      "harga_rata": 13566.0
+      "periode": "2026-06-04 02:54",
+      "harga_rata": 13461.0
     },
     {
       "komoditas": "Cabai Merah",
-      "periode": "2026-05-11 09:54",
-      "harga_rata": 43586.0
+      "periode": "2026-06-04 02:54",
+      "harga_rata": 45384.0
     },
     {
       "komoditas": "Gula Pasir",
-      "periode": "2026-05-11 09:54",
-      "harga_rata": 16615.0
+      "periode": "2026-06-04 02:54",
+      "harga_rata": 16405.0
     },
     {
       "komoditas": "Jagung",
-      "periode": "2026-05-11 09:54",
-      "harga_rata": 6546.0
+      "periode": "2026-06-04 02:54",
+      "harga_rata": 6516.0
     },
     {
       "komoditas": "Kedelai",
-      "periode": "2026-05-11 09:54",
-      "harga_rata": 14224.0
+      "periode": "2026-06-04 02:54",
+      "harga_rata": 13968.0
     },
     {
       "komoditas": "Minyak Goreng",
-      "periode": "2026-05-11 09:54",
-      "harga_rata": 18760.0
+      "periode": "2026-06-04 02:54",
+      "harga_rata": 19006.0
     },
     {
       "komoditas": "Telur Ayam",
-      "periode": "2026-05-11 09:54",
-      "harga_rata": 29392.0
+      "periode": "2026-06-04 02:54",
+      "harga_rata": 29168.0
     },
     {
       "komoditas": "Bawang Merah",
-      "periode": "2026-05-11 09:55",
-      "harga_rata": 38195.0
+      "periode": "2026-06-04 02:55",
+      "harga_rata": 38635.0
     },
     {
       "komoditas": "Beras",
-      "periode": "2026-05-11 09:55",
-      "harga_rata": 13584.0
+      "periode": "2026-06-04 02:55",
+      "harga_rata": 13440.0
     },
     {
       "komoditas": "Cabai Merah",
-      "periode": "2026-05-11 09:55",
-      "harga_rata": 43570.0
+      "periode": "2026-06-04 02:55",
+      "harga_rata": 45386.0
     },
     {
       "komoditas": "Gula Pasir",
-      "periode": "2026-05-11 09:55",
-      "harga_rata": 16618.0
+      "periode": "2026-06-04 02:55",
+      "harga_rata": 16432.0
     },
     {
       "komoditas": "Jagung",
-      "periode": "2026-05-11 09:55",
-      "harga_rata": 6524.0
+      "periode": "2026-06-04 02:55",
+      "harga_rata": 6536.0
     },
     {
       "komoditas": "Kedelai",
-      "periode": "2026-05-11 09:55",
-      "harga_rata": 14156.0
+      "periode": "2026-06-04 02:55",
+      "harga_rata": 13978.0
     },
     {
       "komoditas": "Minyak Goreng",
-      "periode": "2026-05-11 09:55",
-      "harga_rata": 18766.0
+      "periode": "2026-06-04 02:55",
+      "harga_rata": 18946.0
     },
     {
       "komoditas": "Telur Ayam",
-      "periode": "2026-05-11 09:55",
-      "harga_rata": 29440.0
+      "periode": "2026-06-04 02:55",
+      "harga_rata": 29169.0
     },
     {
       "komoditas": "Bawang Merah",
-      "periode": "2026-05-11 09:56",
-      "harga_rata": 38001.0
+      "periode": "2026-06-04 02:56",
+      "harga_rata": 38906.0
     },
     {
       "komoditas": "Beras",
-      "periode": "2026-05-11 09:56",
-      "harga_rata": 13563.0
+      "periode": "2026-06-04 02:56",
+      "harga_rata": 13469.0
     },
     {
       "komoditas": "Cabai Merah",
-      "periode": "2026-05-11 09:56",
-      "harga_rata": 43745.0
+      "periode": "2026-06-04 02:56",
+      "harga_rata": 45018.0
     },
     {
       "komoditas": "Gula Pasir",
-      "periode": "2026-05-11 09:56",
-      "harga_rata": 16611.0
+      "periode": "2026-06-04 02:56",
+      "harga_rata": 16454.0
     },
     {
       "komoditas": "Jagung",
-      "periode": "2026-05-11 09:56",
-      "harga_rata": 6520.0
+      "periode": "2026-06-04 02:56",
+      "harga_rata": 6557.0
     },
     {
       "komoditas": "Kedelai",
-      "periode": "2026-05-11 09:56",
-      "harga_rata": 14100.0
+      "periode": "2026-06-04 02:56",
+      "harga_rata": 14013.0
     },
     {
       "komoditas": "Minyak Goreng",
-      "periode": "2026-05-11 09:56",
-      "harga_rata": 18781.0
+      "periode": "2026-06-04 02:56",
+      "harga_rata": 18914.0
     },
     {
       "komoditas": "Telur Ayam",
-      "periode": "2026-05-11 09:56",
-      "harga_rata": 29318.0
+      "periode": "2026-06-04 02:56",
+      "harga_rata": 29142.0
     }
   ],
   "korelasi_berita": [
     {
       "komoditas": "Beras",
-      "frekuensi_berita": 1,
-      "avg_perubahan_persen": 0.01
+      "frekuensi_berita": 0,
+      "avg_perubahan_persen": -0.06
     },
     {
       "komoditas": "Jagung",
       "frekuensi_berita": 0,
-      "avg_perubahan_persen": 0.05
+      "avg_perubahan_persen": 0.12
     },
     {
       "komoditas": "Kedelai",
       "frekuensi_berita": 0,
-      "avg_perubahan_persen": 0.07
+      "avg_perubahan_persen": -0.0
     },
     {
       "komoditas": "Gula Pasir",
       "frekuensi_berita": 2,
-      "avg_perubahan_persen": 0.03
+      "avg_perubahan_persen": -0.04
     },
     {
       "komoditas": "Minyak Goreng",
-      "frekuensi_berita": 0,
-      "avg_perubahan_persen": -0.14
+      "frekuensi_berita": 1,
+      "avg_perubahan_persen": -0.07
     },
     {
       "komoditas": "Cabai Merah",
-      "frekuensi_berita": 0,
-      "avg_perubahan_persen": -0.42
+      "frekuensi_berita": 1,
+      "avg_perubahan_persen": 0.09
     },
     {
       "komoditas": "Bawang Merah",
-      "frekuensi_berita": 0,
-      "avg_perubahan_persen": -0.23
+      "frekuensi_berita": 1,
+      "avg_perubahan_persen": 0.33
     },
     {
       "komoditas": "Telur Ayam",
-      "frekuensi_berita": 0,
-      "avg_perubahan_persen": 0.11
+      "frekuensi_berita": 1,
+      "avg_perubahan_persen": 0.08
     }
   ],
   "prediksi_mlllib": [
     {
       "komoditas": "Beras",
-      "n_total": 25,
-      "n_train": 20,
-      "n_test": 5,
-      "koefisien_waktu": -30.953356,
+      "n_total": 13,
+      "n_train": 10,
+      "n_test": 3,
+      "koefisien_waktu": -21.007573,
       "koefisien_jam": 0.0,
-      "intercept": 13536.15,
-      "r2_train": 0.6965,
-      "rmse_train": 20.44,
-      "mae_train": 15.59,
-      "r2_test": -87.1573,
-      "rmse_test": 104.11,
-      "mae_test": 103.15,
+      "intercept": 13492.8,
+      "r2_train": 0.7622,
+      "rmse_train": 11.75,
+      "mae_train": 9.89,
+      "r2_test": -0.4038,
+      "rmse_test": 21.11,
+      "mae_test": 17.25,
       "tren": "TURUN",
       "prediksi_5_step": [
         {
           "step": 1,
-          "time_idx": 25,
-          "jam": 17,
-          "harga_pred": 13453.0
+          "time_idx": 13,
+          "jam": 10,
+          "harga_pred": 13431.0
         },
         {
           "step": 2,
-          "time_idx": 26,
-          "jam": 18,
-          "harga_pred": 13448.0
+          "time_idx": 14,
+          "jam": 11,
+          "harga_pred": 13423.0
         },
         {
           "step": 3,
-          "time_idx": 27,
-          "jam": 19,
-          "harga_pred": 13442.0
+          "time_idx": 15,
+          "jam": 12,
+          "harga_pred": 13416.0
         },
         {
           "step": 4,
-          "time_idx": 28,
-          "jam": 20,
-          "harga_pred": 13437.0
+          "time_idx": 16,
+          "jam": 13,
+          "harga_pred": 13409.0
         },
         {
           "step": 5,
-          "time_idx": 29,
-          "jam": 21,
-          "harga_pred": 13431.0
+          "time_idx": 17,
+          "jam": 14,
+          "harga_pred": 13401.0
         }
       ],
-      "interpretasi": "Harga Beras cenderung TURUN (koef_waktu=-30.9534). Akurasi model rendah - harga sangat fluktuatif dan sulit diprediksi secara linier: R2_test=-87.1573, RMSE_test=Rp104. Harga cenderung turun; peluang pembelian stok dengan harga lebih murah."
+      "interpretasi": "Harga Beras cenderung TURUN (koef_waktu=-21.0076). Akurasi model rendah - harga sangat fluktuatif dan sulit diprediksi secara linier: R2_test=-0.4038, RMSE_test=Rp21. Harga cenderung turun; peluang pembelian stok dengan harga lebih murah."
     },
     {
       "komoditas": "Jagung",
-      "n_total": 25,
-      "n_train": 20,
-      "n_test": 5,
-      "koefisien_waktu": 0.117001,
+      "n_total": 13,
+      "n_train": 10,
+      "n_test": 3,
+      "koefisien_waktu": 9.634268,
       "koefisien_jam": 0.0,
-      "intercept": 6511.75,
-      "r2_train": 0.0001,
-      "rmse_train": 14.99,
-      "mae_train": 13.01,
-      "r2_test": -3.0761,
-      "rmse_test": 23.5,
-      "mae_test": 20.4,
+      "intercept": 6501.2,
+      "r2_train": 0.4205,
+      "rmse_train": 11.32,
+      "mae_train": 9.28,
+      "r2_test": -3.0459,
+      "rmse_test": 21.54,
+      "mae_test": 20.0,
       "tren": "NAIK",
       "prediksi_5_step": [
         {
           "step": 1,
-          "time_idx": 25,
-          "jam": 17,
-          "harga_pred": 6512.0
+          "time_idx": 13,
+          "jam": 10,
+          "harga_pred": 6530.0
         },
         {
           "step": 2,
-          "time_idx": 26,
-          "jam": 18,
-          "harga_pred": 6512.0
+          "time_idx": 14,
+          "jam": 11,
+          "harga_pred": 6533.0
         },
         {
           "step": 3,
-          "time_idx": 27,
-          "jam": 19,
-          "harga_pred": 6512.0
+          "time_idx": 15,
+          "jam": 12,
+          "harga_pred": 6536.0
         },
         {
           "step": 4,
-          "time_idx": 28,
-          "jam": 20,
-          "harga_pred": 6512.0
+          "time_idx": 16,
+          "jam": 13,
+          "harga_pred": 6540.0
         },
         {
           "step": 5,
-          "time_idx": 29,
-          "jam": 21,
-          "harga_pred": 6512.0
+          "time_idx": 17,
+          "jam": 14,
+          "harga_pred": 6543.0
         }
       ],
-      "interpretasi": "Harga Jagung cenderung NAIK (koef_waktu=0.1170). Akurasi model rendah - harga sangat fluktuatif dan sulit diprediksi secara linier: R2_test=-3.0761, RMSE_test=Rp23. Pantau potensi kenaikan; pertimbangkan pembelian stok lebih awal."
+      "interpretasi": "Harga Jagung cenderung NAIK (koef_waktu=9.6343). Akurasi model rendah - harga sangat fluktuatif dan sulit diprediksi secara linier: R2_test=-3.0459, RMSE_test=Rp22. Pantau potensi kenaikan; pertimbangkan pembelian stok lebih awal."
     },
     {
       "komoditas": "Kedelai",
-      "n_total": 25,
-      "n_train": 20,
-      "n_test": 5,
-      "koefisien_waktu": 82.022276,
+      "n_total": 13,
+      "n_train": 10,
+      "n_test": 3,
+      "koefisien_waktu": -13.964471,
       "koefisien_jam": 0.0,
-      "intercept": 14188.4,
-      "r2_train": 0.8531,
-      "rmse_train": 34.05,
-      "mae_train": 28.6,
-      "r2_test": -14.9225,
-      "rmse_test": 207.29,
-      "mae_test": 194.41,
-      "tren": "NAIK",
+      "intercept": 13955.3,
+      "r2_train": 0.1589,
+      "rmse_train": 32.17,
+      "mae_train": 26.93,
+      "r2_test": -15.7825,
+      "rmse_test": 68.74,
+      "mae_test": 65.64,
+      "tren": "TURUN",
       "prediksi_5_step": [
         {
           "step": 1,
-          "time_idx": 25,
-          "jam": 17,
-          "harga_pred": 14409.0
+          "time_idx": 13,
+          "jam": 10,
+          "harga_pred": 13914.0
         },
         {
           "step": 2,
-          "time_idx": 26,
-          "jam": 18,
-          "harga_pred": 14423.0
+          "time_idx": 14,
+          "jam": 11,
+          "harga_pred": 13909.0
         },
         {
           "step": 3,
-          "time_idx": 27,
-          "jam": 19,
-          "harga_pred": 14437.0
+          "time_idx": 15,
+          "jam": 12,
+          "harga_pred": 13904.0
         },
         {
           "step": 4,
-          "time_idx": 28,
-          "jam": 20,
-          "harga_pred": 14452.0
+          "time_idx": 16,
+          "jam": 13,
+          "harga_pred": 13899.0
         },
         {
           "step": 5,
-          "time_idx": 29,
-          "jam": 21,
-          "harga_pred": 14466.0
+          "time_idx": 17,
+          "jam": 14,
+          "harga_pred": 13895.0
         }
       ],
-      "interpretasi": "Harga Kedelai cenderung NAIK (koef_waktu=82.0223). Akurasi model rendah - harga sangat fluktuatif dan sulit diprediksi secara linier: R2_test=-14.9225, RMSE_test=Rp207. Pantau potensi kenaikan; pertimbangkan pembelian stok lebih awal."
+      "interpretasi": "Harga Kedelai cenderung TURUN (koef_waktu=-13.9645). Akurasi model rendah - harga sangat fluktuatif dan sulit diprediksi secara linier: R2_test=-15.7825, RMSE_test=Rp69. Harga cenderung turun; peluang pembelian stok dengan harga lebih murah."
     },
     {
       "komoditas": "Gula Pasir",
-      "n_total": 25,
-      "n_train": 20,
-      "n_test": 5,
-      "koefisien_waktu": 0.736675,
+      "n_total": 13,
+      "n_train": 10,
+      "n_test": 3,
+      "koefisien_waktu": -31.580921,
       "koefisien_jam": 0.0,
-      "intercept": 16591.3,
-      "r2_train": 0.0017,
-      "rmse_train": 17.89,
-      "mae_train": 15.13,
-      "r2_test": -3.5528,
-      "rmse_test": 25.48,
-      "mae_test": 22.5,
-      "tren": "NAIK",
+      "intercept": 16477.2,
+      "r2_train": 0.5731,
+      "rmse_train": 27.28,
+      "mae_train": 23.3,
+      "r2_test": -2.9647,
+      "rmse_test": 45.59,
+      "mae_test": 40.09,
+      "tren": "TURUN",
       "prediksi_5_step": [
         {
           "step": 1,
-          "time_idx": 25,
-          "jam": 17,
-          "harga_pred": 16593.0
+          "time_idx": 13,
+          "jam": 10,
+          "harga_pred": 16384.0
         },
         {
           "step": 2,
-          "time_idx": 26,
-          "jam": 18,
-          "harga_pred": 16593.0
+          "time_idx": 14,
+          "jam": 11,
+          "harga_pred": 16373.0
         },
         {
           "step": 3,
-          "time_idx": 27,
-          "jam": 19,
-          "harga_pred": 16594.0
+          "time_idx": 15,
+          "jam": 12,
+          "harga_pred": 16362.0
         },
         {
           "step": 4,
-          "time_idx": 28,
-          "jam": 20,
-          "harga_pred": 16594.0
+          "time_idx": 16,
+          "jam": 13,
+          "harga_pred": 16351.0
         },
         {
           "step": 5,
-          "time_idx": 29,
-          "jam": 21,
-          "harga_pred": 16594.0
+          "time_idx": 17,
+          "jam": 14,
+          "harga_pred": 16340.0
         }
       ],
-      "interpretasi": "Harga Gula Pasir cenderung NAIK (koef_waktu=0.7367). Akurasi model rendah - harga sangat fluktuatif dan sulit diprediksi secara linier: R2_test=-3.5528, RMSE_test=Rp25. Pantau potensi kenaikan; pertimbangkan pembelian stok lebih awal."
+      "interpretasi": "Harga Gula Pasir cenderung TURUN (koef_waktu=-31.5809). Akurasi model rendah - harga sangat fluktuatif dan sulit diprediksi secara linier: R2_test=-2.9647, RMSE_test=Rp46. Harga cenderung turun; peluang pembelian stok dengan harga lebih murah."
     },
     {
       "komoditas": "Minyak Goreng",
-      "n_total": 25,
-      "n_train": 20,
-      "n_test": 5,
-      "koefisien_waktu": -84.067633,
+      "n_total": 13,
+      "n_train": 10,
+      "n_test": 3,
+      "koefisien_waktu": 4.208471,
       "koefisien_jam": 0.0,
-      "intercept": 18881.5,
-      "r2_train": 0.8329,
-      "rmse_train": 37.67,
-      "mae_train": 32.45,
-      "r2_test": -30.416,
-      "rmse_test": 72.7,
-      "mae_test": 67.34,
-      "tren": "TURUN",
-      "prediksi_5_step": [
-        {
-          "step": 1,
-          "time_idx": 25,
-          "jam": 17,
-          "harga_pred": 18656.0
-        },
-        {
-          "step": 2,
-          "time_idx": 26,
-          "jam": 18,
-          "harga_pred": 18641.0
-        },
-        {
-          "step": 3,
-          "time_idx": 27,
-          "jam": 19,
-          "harga_pred": 18626.0
-        },
-        {
-          "step": 4,
-          "time_idx": 28,
-          "jam": 20,
-          "harga_pred": 18612.0
-        },
-        {
-          "step": 5,
-          "time_idx": 29,
-          "jam": 21,
-          "harga_pred": 18597.0
-        }
-      ],
-      "interpretasi": "Harga Minyak Goreng cenderung TURUN (koef_waktu=-84.0676). Akurasi model rendah - harga sangat fluktuatif dan sulit diprediksi secara linier: R2_test=-30.4160, RMSE_test=Rp73. Harga cenderung turun; peluang pembelian stok dengan harga lebih murah."
-    },
-    {
-      "komoditas": "Cabai Merah",
-      "n_total": 25,
-      "n_train": 20,
-      "n_test": 5,
-      "koefisien_waktu": -821.193442,
-      "koefisien_jam": 0.0,
-      "intercept": 44439.2,
-      "r2_train": 0.7922,
-      "rmse_train": 420.77,
-      "mae_train": 372.13,
-      "r2_test": -61.2445,
-      "rmse_test": 993.32,
-      "mae_test": 952.56,
-      "tren": "TURUN",
-      "prediksi_5_step": [
-        {
-          "step": 1,
-          "time_idx": 25,
-          "jam": 17,
-          "harga_pred": 42232.0
-        },
-        {
-          "step": 2,
-          "time_idx": 26,
-          "jam": 18,
-          "harga_pred": 42089.0
-        },
-        {
-          "step": 3,
-          "time_idx": 27,
-          "jam": 19,
-          "harga_pred": 41947.0
-        },
-        {
-          "step": 4,
-          "time_idx": 28,
-          "jam": 20,
-          "harga_pred": 41805.0
-        },
-        {
-          "step": 5,
-          "time_idx": 29,
-          "jam": 21,
-          "harga_pred": 41662.0
-        }
-      ],
-      "interpretasi": "Harga Cabai Merah cenderung TURUN (koef_waktu=-821.1934). Akurasi model rendah - harga sangat fluktuatif dan sulit diprediksi secara linier: R2_test=-61.2445, RMSE_test=Rp993. Harga cenderung turun; peluang pembelian stok dengan harga lebih murah."
-    },
-    {
-      "komoditas": "Bawang Merah",
-      "n_total": 25,
-      "n_train": 20,
-      "n_test": 5,
-      "koefisien_waktu": -224.989253,
-      "koefisien_jam": 0.0,
-      "intercept": 38178.1,
-      "r2_train": 0.3886,
-      "rmse_train": 282.33,
-      "mae_train": 236.97,
-      "r2_test": -7.5004,
-      "rmse_test": 596.25,
-      "mae_test": 576.83,
-      "tren": "TURUN",
-      "prediksi_5_step": [
-        {
-          "step": 1,
-          "time_idx": 25,
-          "jam": 17,
-          "harga_pred": 37573.0
-        },
-        {
-          "step": 2,
-          "time_idx": 26,
-          "jam": 18,
-          "harga_pred": 37534.0
-        },
-        {
-          "step": 3,
-          "time_idx": 27,
-          "jam": 19,
-          "harga_pred": 37495.0
-        },
-        {
-          "step": 4,
-          "time_idx": 28,
-          "jam": 20,
-          "harga_pred": 37456.0
-        },
-        {
-          "step": 5,
-          "time_idx": 29,
-          "jam": 21,
-          "harga_pred": 37417.0
-        }
-      ],
-      "interpretasi": "Harga Bawang Merah cenderung TURUN (koef_waktu=-224.9893). Akurasi model rendah - harga sangat fluktuatif dan sulit diprediksi secara linier: R2_test=-7.5004, RMSE_test=Rp596. Harga cenderung turun; peluang pembelian stok dengan harga lebih murah."
-    },
-    {
-      "komoditas": "Telur Ayam",
-      "n_total": 25,
-      "n_train": 20,
-      "n_test": 5,
-      "koefisien_waktu": 122.578409,
-      "koefisien_jam": 0.0,
-      "intercept": 29049.35,
-      "r2_train": 0.7067,
-      "rmse_train": 79.01,
-      "mae_train": 66.58,
-      "r2_test": -2.6738,
-      "rmse_test": 106.96,
-      "mae_test": 97.16,
+      "intercept": 18968.0,
+      "r2_train": 0.0127,
+      "rmse_train": 37.1,
+      "mae_train": 31.45,
+      "r2_test": -3.3336,
+      "rmse_test": 48.83,
+      "mae_test": 42.19,
       "tren": "NAIK",
       "prediksi_5_step": [
         {
           "step": 1,
-          "time_idx": 25,
-          "jam": 17,
-          "harga_pred": 29379.0
+          "time_idx": 13,
+          "jam": 10,
+          "harga_pred": 18980.0
         },
         {
           "step": 2,
-          "time_idx": 26,
-          "jam": 18,
-          "harga_pred": 29400.0
+          "time_idx": 14,
+          "jam": 11,
+          "harga_pred": 18982.0
         },
         {
           "step": 3,
-          "time_idx": 27,
-          "jam": 19,
-          "harga_pred": 29421.0
+          "time_idx": 15,
+          "jam": 12,
+          "harga_pred": 18983.0
         },
         {
           "step": 4,
-          "time_idx": 28,
-          "jam": 20,
-          "harga_pred": 29443.0
+          "time_idx": 16,
+          "jam": 13,
+          "harga_pred": 18985.0
         },
         {
           "step": 5,
-          "time_idx": 29,
-          "jam": 21,
-          "harga_pred": 29464.0
+          "time_idx": 17,
+          "jam": 14,
+          "harga_pred": 18986.0
         }
       ],
-      "interpretasi": "Harga Telur Ayam cenderung NAIK (koef_waktu=122.5784). Akurasi model rendah - harga sangat fluktuatif dan sulit diprediksi secara linier: R2_test=-2.6738, RMSE_test=Rp107. Pantau potensi kenaikan; pertimbangkan pembelian stok lebih awal."
+      "interpretasi": "Harga Minyak Goreng cenderung NAIK (koef_waktu=4.2085). Akurasi model rendah - harga sangat fluktuatif dan sulit diprediksi secara linier: R2_test=-3.3336, RMSE_test=Rp49. Pantau potensi kenaikan; pertimbangkan pembelian stok lebih awal."
+    },
+    {
+      "komoditas": "Cabai Merah",
+      "n_total": 13,
+      "n_train": 10,
+      "n_test": 3,
+      "koefisien_waktu": 206.875904,
+      "koefisien_jam": 0.0,
+      "intercept": 45177.8,
+      "r2_train": 0.5748,
+      "rmse_train": 178.1,
+      "mae_train": 155.75,
+      "r2_test": -3.8298,
+      "rmse_test": 450.74,
+      "mae_test": 382.63,
+      "tren": "NAIK",
+      "prediksi_5_step": [
+        {
+          "step": 1,
+          "time_idx": 13,
+          "jam": 10,
+          "harga_pred": 45790.0
+        },
+        {
+          "step": 2,
+          "time_idx": 14,
+          "jam": 11,
+          "harga_pred": 45862.0
+        },
+        {
+          "step": 3,
+          "time_idx": 15,
+          "jam": 12,
+          "harga_pred": 45934.0
+        },
+        {
+          "step": 4,
+          "time_idx": 16,
+          "jam": 13,
+          "harga_pred": 46006.0
+        },
+        {
+          "step": 5,
+          "time_idx": 17,
+          "jam": 14,
+          "harga_pred": 46078.0
+        }
+      ],
+      "interpretasi": "Harga Cabai Merah cenderung NAIK (koef_waktu=206.8759). Akurasi model rendah - harga sangat fluktuatif dan sulit diprediksi secara linier: R2_test=-3.8298, RMSE_test=Rp451. Pantau potensi kenaikan; pertimbangkan pembelian stok lebih awal."
+    },
+    {
+      "komoditas": "Bawang Merah",
+      "n_total": 13,
+      "n_train": 10,
+      "n_test": 3,
+      "koefisien_waktu": 123.975985,
+      "koefisien_jam": 0.0,
+      "intercept": 38640.7,
+      "r2_train": 0.2748,
+      "rmse_train": 201.6,
+      "mae_train": 151.76,
+      "r2_test": -1.3902,
+      "rmse_test": 224.77,
+      "mae_test": 195.93,
+      "tren": "NAIK",
+      "prediksi_5_step": [
+        {
+          "step": 1,
+          "time_idx": 13,
+          "jam": 10,
+          "harga_pred": 39008.0
+        },
+        {
+          "step": 2,
+          "time_idx": 14,
+          "jam": 11,
+          "harga_pred": 39051.0
+        },
+        {
+          "step": 3,
+          "time_idx": 15,
+          "jam": 12,
+          "harga_pred": 39094.0
+        },
+        {
+          "step": 4,
+          "time_idx": 16,
+          "jam": 13,
+          "harga_pred": 39137.0
+        },
+        {
+          "step": 5,
+          "time_idx": 17,
+          "jam": 14,
+          "harga_pred": 39180.0
+        }
+      ],
+      "interpretasi": "Harga Bawang Merah cenderung NAIK (koef_waktu=123.9760). Akurasi model rendah - harga sangat fluktuatif dan sulit diprediksi secara linier: R2_test=-1.3902, RMSE_test=Rp225. Pantau potensi kenaikan; pertimbangkan pembelian stok lebih awal."
+    },
+    {
+      "komoditas": "Telur Ayam",
+      "n_total": 13,
+      "n_train": 10,
+      "n_test": 3,
+      "koefisien_waktu": 20.311958,
+      "koefisien_jam": 0.0,
+      "intercept": 29159.8,
+      "r2_train": 0.323,
+      "rmse_train": 29.43,
+      "mae_train": 23.63,
+      "r2_test": -8.9603,
+      "rmse_test": 50.69,
+      "mae_test": 45.77,
+      "tren": "NAIK",
+      "prediksi_5_step": [
+        {
+          "step": 1,
+          "time_idx": 13,
+          "jam": 10,
+          "harga_pred": 29220.0
+        },
+        {
+          "step": 2,
+          "time_idx": 14,
+          "jam": 11,
+          "harga_pred": 29227.0
+        },
+        {
+          "step": 3,
+          "time_idx": 15,
+          "jam": 12,
+          "harga_pred": 29234.0
+        },
+        {
+          "step": 4,
+          "time_idx": 16,
+          "jam": 13,
+          "harga_pred": 29241.0
+        },
+        {
+          "step": 5,
+          "time_idx": 17,
+          "jam": 14,
+          "harga_pred": 29248.0
+        }
+      ],
+      "interpretasi": "Harga Telur Ayam cenderung NAIK (koef_waktu=20.3120). Akurasi model rendah - harga sangat fluktuatif dan sulit diprediksi secara linier: R2_test=-8.9603, RMSE_test=Rp51. Pantau potensi kenaikan; pertimbangkan pembelian stok lebih awal."
     }
   ],
-  "mllib_generated_at": "2026-05-11T16:56:22.655162"
+  "mllib_generated_at": "2026-06-04T09:56:37.891028"
 }

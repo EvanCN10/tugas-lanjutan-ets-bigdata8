@@ -79,6 +79,10 @@ def build_spark_session(use_hdfs=False):
         builder, extra_packages=["io.delta:delta-spark_2.12:3.1.0"]
     ).getOrCreate()
     spark.sparkContext.setLogLevel("WARN")
+    try:
+        spark._jvm.org.apache.logging.log4j.core.config.Configurator.setLevel("org.apache.spark.util.ShutdownHookManager", spark._jvm.org.apache.logging.log4j.Level.OFF)
+    except Exception:
+        pass
     return spark
 
 def ingest_layer():
@@ -116,7 +120,7 @@ def ingest_layer():
 
     if not hdfs_active or api_df is None:
         if os.path.exists(LOCAL_API_PATH):
-            local_api_uri = Path(LOCAL_API_PATH).as_uri()
+            local_api_uri = "file:///" + LOCAL_API_PATH.replace("\\", "/")
             print(f"[LOKAL] Membaca JSON array dari file lokal: {local_api_uri}")
             api_df = spark.read.option("multiLine", True).json(local_api_uri)
             print(f"[LOKAL] Berhasil memuat {api_df.count()} baris data dari file lokal.")
@@ -130,7 +134,7 @@ def ingest_layer():
             .withColumn("_source", lit("api"))
         
         # Simpan ke Delta format (Bronze)
-        bronze_api_target_uri = Path(BRONZE_API_TARGET).as_uri()
+        bronze_api_target_uri = "file:///" + BRONZE_API_TARGET.replace("\\", "/")
         print(f"[WRITE] Menyimpan ke Bronze Delta: {bronze_api_target_uri}")
         bronze_api_df.write.format("delta").mode("append").save(bronze_api_target_uri)
         print(f"[SUCCESS] Ingest API selesai. Data tersimpan di {BRONZE_API_TARGET}")
@@ -150,7 +154,7 @@ def ingest_layer():
 
     if not hdfs_active or rss_df is None:
         if os.path.exists(LOCAL_RSS_PATH):
-            local_rss_uri = Path(LOCAL_RSS_PATH).as_uri()
+            local_rss_uri = "file:///" + LOCAL_RSS_PATH.replace("\\", "/")
             print(f"[LOKAL] Membaca JSON array dari file lokal: {local_rss_uri}")
             rss_df = spark.read.option("multiLine", True).json(local_rss_uri)
             print(f"[LOKAL] Berhasil memuat {rss_df.count()} baris data RSS dari file lokal.")
@@ -164,7 +168,7 @@ def ingest_layer():
             .withColumn("_source", lit("rss"))
         
         # Simpan ke Delta format (Bronze)
-        bronze_rss_target_uri = Path(BRONZE_RSS_TARGET).as_uri()
+        bronze_rss_target_uri = "file:///" + BRONZE_RSS_TARGET.replace("\\", "/")
         print(f"[WRITE] Menyimpan ke Bronze Delta: {bronze_rss_target_uri}")
         bronze_rss_df.write.format("delta").mode("append").save(bronze_rss_target_uri)
         print(f"[SUCCESS] Ingest RSS selesai. Data tersimpan di {BRONZE_RSS_TARGET}")

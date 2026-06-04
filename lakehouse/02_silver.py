@@ -48,10 +48,10 @@ SILVER_API_PATH = os.path.join(BASE_DIR, "lakehouse_data", "silver", "pangan_api
 SILVER_RSS_PATH = os.path.join(BASE_DIR, "lakehouse_data", "silver", "pangan_rss")
 
 # Convert local paths to valid URIs for Spark
-BRONZE_API_URI = Path(BRONZE_API_PATH).as_uri()
-BRONZE_RSS_URI = Path(BRONZE_RSS_PATH).as_uri()
-SILVER_API_URI = Path(SILVER_API_PATH).as_uri()
-SILVER_RSS_URI = Path(SILVER_RSS_PATH).as_uri()
+BRONZE_API_URI = "file:///" + BRONZE_API_PATH.replace("\\", "/")
+BRONZE_RSS_URI = "file:///" + BRONZE_RSS_PATH.replace("\\", "/")
+SILVER_API_URI = "file:///" + SILVER_API_PATH.replace("\\", "/")
+SILVER_RSS_URI = "file:///" + SILVER_RSS_PATH.replace("\\", "/")
 
 def build_spark_session():
     builder = SparkSession.builder \
@@ -68,6 +68,10 @@ def build_spark_session():
         builder, extra_packages=["io.delta:delta-spark_2.12:3.1.0"]
     ).getOrCreate()
     spark.sparkContext.setLogLevel("WARN")
+    try:
+        spark._jvm.org.apache.logging.log4j.core.config.Configurator.setLevel("org.apache.spark.util.ShutdownHookManager", spark._jvm.org.apache.logging.log4j.Level.OFF)
+    except Exception:
+        pass
     return spark
 
 def clean_and_transform():
@@ -142,10 +146,10 @@ def clean_and_transform():
     deltaTable.history().select("version", "timestamp", "operation", "userName").show(truncate=False)
 
     # B. Lakukan update nilai (simulasi perubahan data)
-    print("[TIME TRAVEL 2] Melakukan Koreksi Data (Simulasi update harga komoditas Jagung jika di bawah Rp 6000 menjadi Rp 6000)")
+    print("[TIME TRAVEL 2] Melakukan Koreksi Data (Simulasi penambahan Rp 100 untuk semua harga > 0)")
     deltaTable.update(
-        condition = "komoditas = 'Jagung' AND harga < 6000",
-        set = { "harga": lit(6000.0) }
+    condition="harga > 0",
+    set={"harga": col("harga") + 100}
     )
 
     # C. Bandingkan versi sekarang dengan versi 0
@@ -153,15 +157,15 @@ def clean_and_transform():
     
     print("\n--- Data SEKARANG (Setelah Update) ---")
     spark.read.format("delta").load(SILVER_API_URI) \
-        .filter("komoditas = 'Jagung'") \
         .select("komoditas", "harga", "timestamp") \
-        .show(5)
+        .orderBy("komoditas") \
+        .show(10)
 
     print("--- Data VERSI 0 (Sebelum Update) ---")
     spark.read.format("delta").option("versionAsOf", 0).load(SILVER_API_URI) \
-        .filter("komoditas = 'Jagung'") \
         .select("komoditas", "harga", "timestamp") \
-        .show(5)
+        .orderBy("komoditas") \
+        .show(10)
 
     spark.stop()
     print("\n" + "=" * 70)
