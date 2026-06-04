@@ -430,3 +430,108 @@ Dengan menerapkan Delta Lake sebagai format tabel, kami memperoleh keuntungan kr
 2. **Schema Enforcement & Evolution**: Delta Lake memproteksi data dari "bad data" dengan memvalidasi skema secara otomatis. Jika skema berubah secara legal, kita dapat menggunakan opsi `mergeSchema` untuk melakukan evolusi skema tanpa merusak pipeline lama.
 3. **Audit Trail & Time Travel**: Setiap modifikasi dicatat dalam log. Kami dapat melihat history audit (siapa, kapan, dan operasi apa yang dilakukan) dan melakukan rollback atau memanggil ulang data di masa lampau (`versionAsOf`). Hal ini krusial untuk melatih ulang model Machine Learning secara reprodusibel.
 4. **Performa Query Lebih Cepat**: Delta Lake menyimpan file dalam format Parquet (columnar) terkompresi lengkap dengan file metadata, statistik min/max, dan partisi. Ini memungkinkan query engine melakukan skip file (data pruning) sehingga query analitik jauh lebih cepat dibandingkan memindai seluruh direktori JSON mentah.
+
+## Dokumentasi
+
+### Time Travel
+```
+==================================================
+      DEMONSTRASI TIME TRAVEL DELTA LAKE
+==================================================
+
+[TIME TRAVEL 1] Menampilkan History Operasi Tabel:
++-------+-----------------------+---------+--------+
+|version|timestamp              |operation|userName|
++-------+-----------------------+---------+--------+
+|2      |2026-06-04 08:30:27.569|WRITE    |NULL    |
+|1      |2026-06-04 08:18:38.031|WRITE    |NULL    |
+|0      |2026-06-04 08:15:16.84 |WRITE    |NULL    |
++-------+-----------------------+---------+--------+
+
+[TIME TRAVEL 2] Melakukan Koreksi Data (Simulasi update harga komoditas Jagung jika di bawah Rp 6000 menjadi Rp 6000)
+
+[TIME TRAVEL 3] Membandingkan data SEKARANG vs data VERSI 0 (Sebelum Update)
+
+--- Data SEKARANG (Setelah Update) ---
++---------+------+--------------------+
+|komoditas| harga|           timestamp|
++---------+------+--------------------+
+|   Jagung|6495.0|2026-06-04 01:03:...|
+|   Jagung|6504.0|2026-06-04 01:03:...|
+|   Jagung|6532.0|2026-06-04 01:04:...|
+|   Jagung|6529.0|2026-06-04 01:04:...|
+|   Jagung|6534.0|2026-06-04 01:05:...|
++---------+------+--------------------+
+only showing top 5 rows
+
+--- Data VERSI 0 (Sebelum Update) ---
++---------+------+--------------------+
+|komoditas| harga|           timestamp|
++---------+------+--------------------+
+|   Jagung|6495.0|2026-06-04 01:03:...|
+|   Jagung|6504.0|2026-06-04 01:03:...|
+|   Jagung|6532.0|2026-06-04 01:04:...|
+|   Jagung|6529.0|2026-06-04 01:04:...|
+|   Jagung|6534.0|2026-06-04 01:05:...|
++---------+------+--------------------+
+only showing top 5 rows
+```
+
+### Delta Table
+```
++-------------+---------+---------+------------------+-----------+------------------+
+|    komoditas|harga_max|harga_min|         harga_avg|jumlah_data|   volatilitas_pct|
++-------------+---------+---------+------------------+-----------+------------------+
+|        Beras|  13641.0|  13485.0|13560.037735849057|         53|1.1568409343715238|
+|   Gula Pasir|  16676.0|  16478.0|16572.716981132075|         53|1.2016021361815754|
+|  Cabai Merah|  46041.0|  44068.0| 45106.47169811321|         53| 4.477171643823183|
+|       Jagung|   6541.0|   6425.0| 6485.169811320755|         53|1.8054474708171206|
+|      Kedelai|  14071.0|  13759.0| 13923.67924528302|         53| 2.267606657460571|
+|Minyak Goreng|  19150.0|  18832.0|19020.132075471698|         53|1.6886151231945625|
+| Bawang Merah|  38413.0|  36082.0| 37372.79245283019|         53| 6.460284906601629|
+|   Telur Ayam|  29132.0|  28573.0|28832.849056603773|         53|1.9563923984180869|
++-------------+---------+---------+------------------+-----------+------------------+
+
+
+--- 2. Generating Gold Trend Table ---
+[WRITE] Menyimpan ke Gold Trend Delta: file:///C:/Users/Project Codingan/BigData/medalion/lakehouse_data/gold/pangan_trend
++------------+----------------+----------+
+|   komoditas|         periode|harga_rata|
++------------+----------------+----------+
+|Bawang Merah|2026-06-04 01:03|   38379.0|
+|       Beras|2026-06-04 01:03|   13531.5|
+| Cabai Merah|2026-06-04 01:03|   44553.0|
+|  Gula Pasir|2026-06-04 01:03|   16570.5|
+|      Jagung|2026-06-04 01:03|    6499.5|
++------------+----------------+----------+
+only showing top 5 rows
+
+
+--- 3. Generating Gold Alert (Price Alert) Table ---
+[WRITE] Menyimpan ke Gold Alert Delta: file:///C:/Users/Project Codingan/BigData/medalion/lakehouse_data/gold/pangan_alert
+[ALERT] 0 fluktuasi signifikan terdeteksi.
++---------+-----+----------+----------+-----+---------+
+|komoditas|harga|prev_harga|pct_change|alert|timestamp|
++---------+-----+----------+----------+-----+---------+
++---------+-----+----------+----------+-----+---------+
+
+
+--- 4. Generating Gold News Correlation Table ---
+[WRITE] Menyimpan ke Gold News Delta: file:///C:/Users/Project Codingan/BigData/medalion/lakehouse_data/gold/pangan_news_correlation    
++-------------+----------------+--------------------+
+|    komoditas|frekuensi_berita|avg_perubahan_persen|
++-------------+----------------+--------------------+
+| Bawang Merah|               0|-0.09549811320754716|
+|        Beras|               0|0.033579245283018866|
+|  Cabai Merah|               0|0.002901886792452...|
+|   Gula Pasir|               2|-8.11320754716912...|
+|       Jagung|               1| 0.02362641509433962|
+|      Kedelai|               0|-0.04756226415094341|
+|Minyak Goreng|               1|0.008830188679245274|
+|   Telur Ayam|               1|-0.02463962264150...|
++-------------+----------------+--------------------+
+
+
+--- 5. Exporting Results to Dashboard JSON ---
+[SUCCESS] JSON file berhasil diekspor
+```
